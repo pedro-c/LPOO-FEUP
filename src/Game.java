@@ -6,40 +6,45 @@ public class Game {
 	private int nDrakes = 1;
 	private int nSwords = 1;
 	private int nExits = 1;
-
 	private Character[][] Maze = new Character[width][height];
-
+	Hero hero = new Hero (1,1);
+	
+	
 	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
 	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
-
-	Hero Hero;
 
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
 			for (int col = 0; col < width; col++) {
 				System.out.print(Maze[line][col]);
+				System.out.print(" ");
 			}
 			System.out.println();
 		}
 	}
+	
 
 	public void createMaze() {
+		
 		// Temporario ate criarmos o labirinto de forma aleatoria
-		Exits.get(0).line = 5;
-		Exits.get(0).col = 9;
+		
+		Drake d1 = new Drake(3,1,false);
+		Exit e1 = new Exit (5,9);
+		Sword s1 = new Sword (8,2);
+		
+		Exits.add(e1);
+		Drakes.add(d1);
+		Swords.add(s1);
+		
 
-		Drakes.get(0).line = 3;
-		Drakes.get(0).col = 1;
-
-		Hero.line = 1;
-		Hero.col = 1;
-
-		Swords.get(0).line = 8;
-		Swords.get(0).col = 1;
-
-		// --------------- //
-
+		// Inicia um tabuleiro a branco
+		for (int i = 0; i < width; i++) {
+			for (int x = 0; x < height; x++) {
+				Maze[i][x] = ' ';
+			}
+		}
+		
 		// Colocar as paredes exteriores
 
 		for (int i = 0; i < width; i++) {
@@ -94,7 +99,7 @@ public class Game {
 			Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
 
 		// Colocar Herói
-		Maze[Hero.line][Hero.col] = 'H';
+		Maze[hero.line][hero.col] = 'H';
 
 	}
 
