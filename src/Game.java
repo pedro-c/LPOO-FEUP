@@ -31,7 +31,7 @@ public class Game {
 		
 		Drake d1 = new Drake(3,1,false);
 		Exit e1 = new Exit (5,9);
-		Sword s1 = new Sword (8,2);
+		Sword s1 = new Sword (8,1);
 		
 		Exits.add(e1);
 		Drakes.add(d1);
@@ -104,6 +104,7 @@ public class Game {
 	}
 	
 	public void updateMaze() {
+		
 		
 		
 	}
