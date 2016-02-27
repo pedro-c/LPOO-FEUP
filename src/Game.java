@@ -7,7 +7,7 @@ public class Game {
 	private int nSwords = 1;
 	private int nExits = 1;
 	private Character[][] Maze = new Character[width][height];
-	Hero hero = new Hero (1,1);
+	Hero hero = new Hero (1,1,'H');
 	
 	
 	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
@@ -101,6 +101,11 @@ public class Game {
 		// Colocar Herói
 		Maze[hero.line][hero.col] = 'H';
 
+	}
+	
+	public void updateMaze() {
+		
+		
 	}
 
 }
