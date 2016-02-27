@@ -6,7 +6,13 @@ public class Launcher {
 		Game g = new Game();
 		
 		g.createMaze();
-		g.drawMaze();
+		
+		while(!g.endGame){
+			g.clearScreen();
+			g.drawMaze();
+			g.updateMaze();
+		}
+		g.read.close();
 	}
 
 }
