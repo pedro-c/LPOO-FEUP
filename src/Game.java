@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class Game {
 
-	public boolean endGame = false;
+	public boolean gameLost = false;
+	public boolean gameWon = false;
 	private int width = 10, height = 10;
 	private int nDrakes = 1;
 	private int nSwords = 1;
@@ -15,6 +16,14 @@ public class Game {
 	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
 	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
+	
+	public void clearScreen() {
+
+		for(int clear = 0; clear < 1000; clear++) {
+		    System.out.println("\n") ;
+		}
+
+	}
 
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
@@ -117,21 +126,36 @@ public class Game {
 		char movement;
 
 		System.out.println("Mova o Heroi usando: ASWD");
-
+		
 		movement = read.next().charAt(0);
 		movement = Character.toLowerCase(movement);
 
 		switch (movement) {
 		case 'a':
+			if (Maze[hero.line][hero.col - 1] == 'S' && hero.symbol == 'A') {
+				gameWon = true;
+			} 			
 			if (Maze[hero.line][hero.col - 1] == ' ') {
 				hero.col -= 1;
 			} else if (Maze[hero.line][hero.col - 1] == 'E') {
 				hero.symbol = 'A';
 				hero.col -= 1;
 				updateSword(hero.col, hero.line, false);
+			} 
+			//checks for drakes
+			if (Maze[hero.line][hero.col - 1] == 'D'){
+				if(hero.symbol == 'A'){
+					updateDrakes(hero.col-1,hero.line,true);
+				}
+				else{
+					gameLost=true;
+				}
 			}
 			break;
 		case 'd':
+			if (Maze[hero.line][hero.col + 1] == 'S' && hero.symbol == 'A') {
+				gameWon = true;
+			}
 			if (Maze[hero.line][hero.col + 1] == ' ') {
 				hero.col += 1;
 			} else if (Maze[hero.line][hero.col + 1] == 'E') {
@@ -139,8 +163,20 @@ public class Game {
 				hero.col += 1;
 				updateSword(hero.col, hero.line, false);
 			}
+			//checks for drakes
+			if(Maze[hero.line][hero.col+1] == 'D'){
+				if(hero.symbol == 'A'){
+					updateDrakes(hero.col+1,hero.line,true);
+				}
+				else{
+					gameLost=true;
+				}
+			}
 			break;
 		case 's':
+			if (Maze[hero.line + 1][hero.col] == 'S' && hero.symbol == 'A') {
+				gameWon = true;
+			}
 			if (Maze[hero.line + 1][hero.col] == ' ') {
 				hero.line += 1;
 			} else if (Maze[hero.line + 1][hero.col] == 'E') {
@@ -148,8 +184,20 @@ public class Game {
 				hero.line += 1;
 				updateSword(hero.col, hero.line, false);
 			}
+			//checks for drakes
+			if( Maze[hero.line+1][hero.col] == 'D'){
+				if(hero.symbol == 'A'){
+					updateDrakes(hero.col,hero.line+1,true);
+				}
+				else{
+					gameLost=true;
+				}
+			}
 			break;
 		case 'w':
+			if (Maze[hero.line - 1][hero.col] == 'S' && hero.symbol == 'A') {
+				gameWon = true;
+			}
 			if (Maze[hero.line - 1][hero.col] == ' ') {
 				hero.line -= 1;
 			} else if (Maze[hero.line - 1][hero.col] == 'E') {
@@ -157,32 +205,55 @@ public class Game {
 				hero.line -= 1;
 				updateSword(hero.col, hero.line, false);
 			}
+			//checks for drakes
+			if(Maze[hero.line-1][hero.col] == 'D'){
+				if(hero.symbol == 'A'){
+					updateDrakes(hero.col,hero.line-1,true);
+				}
+				else{
+					gameLost=true;
+				}
+			}
 			break;
 		}
 
 	}
 
-	public void clearScreen() {
-
-		for(int clear = 0; clear < 1000; clear++) {
-		    System.out.println("\n") ;
+	public void updateDrakes(int col, int line, boolean dead) {
+		for (int i = 0; i < nDrakes; i++) {
+			if (Drakes.get(i).col == col && Drakes.get(i).line == line) {
+				Drakes.get(i).dead = dead;
+			}
 		}
-
 	}
 
-	public void updateMaze() {
 
+	public void updateMaze() {
+		
+		//cleans the last hero's position
 		Maze[hero.line][hero.col] = ' ';
+		
+		//moves and updates the hero and checks for dragons and swords
 		updateHero();
+		
+		
 		// Colocar Dragões
-		for (int i = 0; i < nDrakes; i++)
-			Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
+		for (int i = 0; i < nDrakes; i++){
+			if(Drakes.get(i).dead){
+				Maze[Drakes.get(i).line][Drakes.get(i).col] = ' ';
+			}
+			else{
+				Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
+			}
+		}
+			
 
 		// Colocar Espadas
 		for (int i = 0; i < nSwords; i++) {
 			if (Swords.get(i).draw) {
 				Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
-			} else {
+			} 
+			else {
 				Maze[Swords.get(i).line][Swords.get(i).col] = ' ';
 			}
 		}

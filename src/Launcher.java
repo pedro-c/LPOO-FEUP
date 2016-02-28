@@ -7,12 +7,18 @@ public class Launcher {
 		
 		g.createMaze();
 		
-		while(!g.endGame){
+		while(!g.gameLost && !g.gameWon){
 			g.clearScreen();
 			g.drawMaze();
 			g.updateMaze();
 		}
 		g.read.close();
+		g.clearScreen();
+		if(g.gameWon){
+			System.out.print("Congrats, you won!");
+		}else{
+			System.out.print("You Lost!");
+		}
 	}
 
 }
