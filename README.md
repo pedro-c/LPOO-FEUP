@@ -2,7 +2,7 @@
 
 Java guided project.
 
-# Developers:
+# Developers
 - Tiago Grosso
 - Pedro Costa
 
