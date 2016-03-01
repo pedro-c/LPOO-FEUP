@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
 
@@ -10,17 +9,16 @@ public class Game {
 	private int nSwords = 1;
 	private int nExits = 1;
 	private Character[][] Maze = new Character[width][height];
-	public Scanner read = new Scanner(System.in);
 	Hero hero = new Hero(1, 1, 'H');
 
 	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
 	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
-	
+
 	public void clearScreen() {
 
 		for(int clear = 0; clear < 1000; clear++) {
-		    System.out.println("\n") ;
+			System.out.println("\n") ;
 		}
 
 	}
@@ -112,6 +110,16 @@ public class Game {
 
 	}
 
+	public boolean checkExit(int line, int col) {
+		boolean ret = false;
+
+		for(int i = 0; i < nExits; i++)
+			if(Exits.get(i).col == col && Exits.get(i).line == line)
+				ret = Exits.get(i).open;
+
+		return ret;
+	}
+
 	public void updateSword(int col, int line, boolean draw) {
 		for (int i = 0; i < nSwords; i++) {
 			if (Swords.get(i).col == col && Swords.get(i).line == line) {
@@ -121,122 +129,92 @@ public class Game {
 		}
 	}
 
-	public void updateHero() {
+	public boolean updateHero(char movement) {
 
-		char movement;
-
-		System.out.println("Mova o Heroi usando: ASWD");
-		
-		movement = read.next().charAt(0);
-		movement = Character.toLowerCase(movement);
+		int newLine = hero.line;
+		int newCol = hero.col;
 
 		switch (movement) {
 		case 'a':
-			if (Maze[hero.line][hero.col - 1] == 'S' && hero.symbol == 'A') {
-				gameWon = true;
-			} 			
-			if (Maze[hero.line][hero.col - 1] == ' ') {
-				hero.col -= 1;
-			} else if (Maze[hero.line][hero.col - 1] == 'E') {
-				hero.symbol = 'A';
-				hero.col -= 1;
-				updateSword(hero.col, hero.line, false);
-			} 
-			//checks for drakes
-			if (Maze[hero.line][hero.col - 1] == 'D'){
-				if(hero.symbol == 'A'){
-					updateDrakes(hero.col-1,hero.line,true);
-				}
-				else{
-					gameLost=true;
-				}
-			}
+			newCol -= 1;
 			break;
 		case 'd':
-			if (Maze[hero.line][hero.col + 1] == 'S' && hero.symbol == 'A') {
-				gameWon = true;
-			}
-			if (Maze[hero.line][hero.col + 1] == ' ') {
-				hero.col += 1;
-			} else if (Maze[hero.line][hero.col + 1] == 'E') {
-				hero.symbol = 'A';
-				hero.col += 1;
-				updateSword(hero.col, hero.line, false);
-			}
-			//checks for drakes
-			if(Maze[hero.line][hero.col+1] == 'D'){
-				if(hero.symbol == 'A'){
-					updateDrakes(hero.col+1,hero.line,true);
-				}
-				else{
-					gameLost=true;
-				}
-			}
+			newCol += 1;
 			break;
 		case 's':
-			if (Maze[hero.line + 1][hero.col] == 'S' && hero.symbol == 'A') {
-				gameWon = true;
-			}
-			if (Maze[hero.line + 1][hero.col] == ' ') {
-				hero.line += 1;
-			} else if (Maze[hero.line + 1][hero.col] == 'E') {
-				hero.symbol = 'A';
-				hero.line += 1;
-				updateSword(hero.col, hero.line, false);
-			}
-			//checks for drakes
-			if( Maze[hero.line+1][hero.col] == 'D'){
-				if(hero.symbol == 'A'){
-					updateDrakes(hero.col,hero.line+1,true);
-				}
-				else{
-					gameLost=true;
-				}
-			}
+			newLine +=1;
 			break;
 		case 'w':
-			if (Maze[hero.line - 1][hero.col] == 'S' && hero.symbol == 'A') {
-				gameWon = true;
-			}
-			if (Maze[hero.line - 1][hero.col] == ' ') {
-				hero.line -= 1;
-			} else if (Maze[hero.line - 1][hero.col] == 'E') {
-				hero.symbol = 'A';
-				hero.line -= 1;
-				updateSword(hero.col, hero.line, false);
-			}
-			//checks for drakes
-			if(Maze[hero.line-1][hero.col] == 'D'){
-				if(hero.symbol == 'A'){
-					updateDrakes(hero.col,hero.line-1,true);
-				}
-				else{
-					gameLost=true;
-				}
-			}
+			newLine -=1;
 			break;
 		}
 
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			updateSword(newCol, newLine, false);
+		} 
+		else
+			return false; //Invalid Movement
+
+		return true; //Hero moved successfully
+
 	}
 
-	public void updateDrakes(int col, int line, boolean dead) {
-		for (int i = 0; i < nDrakes; i++) {
-			if (Drakes.get(i).col == col && Drakes.get(i).line == line) {
-				Drakes.get(i).dead = dead;
-			}
+	public void killDrakes(int line, int col) {
+
+		if(hero.symbol != 'A')
+		{
+			gameLost = true;
+			return; //No need to do anything else, the game is lost
 		}
+
+		boolean allDead = true;
+		for (int i = 0; i < nDrakes; i++) {
+			if (Drakes.get(i).col == col && Drakes.get(i).line == line) 
+				Drakes.get(i).dead = true;
+			else if(Drakes.get(i).dead == false)
+				allDead = false;
+		}
+		if(allDead)
+			for (int i = 0; i < nExits; i++)
+				Exits.get(i).open = true;
 	}
 
+	public void updateMaze(char movement) {
 
-	public void updateMaze() {
-		
 		//cleans the last hero's position
+
 		Maze[hero.line][hero.col] = ' ';
-		
+
 		//moves and updates the hero and checks for dragons and swords
-		updateHero();
-		
-		
+		if(!updateHero(movement))
+		{
+			Maze[hero.line][hero.col] = hero.symbol;
+			return; //If the movement was invalid, no need to update
+		}
+
+
+		//checks for drakes adjacent to the hero
+
+		if(Maze[hero.line][hero.col-1] == 'D')
+			killDrakes(hero.line,hero.col - 1);
+		if(Maze[hero.line][hero.col+1] == 'D')
+			killDrakes(hero.line,hero.col + 1);
+		if(Maze[hero.line-1][hero.col] == 'D')
+			killDrakes(hero.line - 1,hero.col);
+		if(Maze[hero.line+1][hero.col] == 'D')
+			killDrakes(hero.line + 1,hero.col);
+
+
 		// Colocar Dragões
 		for (int i = 0; i < nDrakes; i++){
 			if(Drakes.get(i).dead){
@@ -246,7 +224,6 @@ public class Game {
 				Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
 			}
 		}
-			
 
 		// Colocar Espadas
 		for (int i = 0; i < nSwords; i++) {

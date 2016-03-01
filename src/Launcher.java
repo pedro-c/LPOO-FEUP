@@ -1,6 +1,21 @@
+import java.util.*;
 
 public class Launcher {
 
+	public static Scanner read = new Scanner(System.in);
+	
+	public static char getMove()
+	{
+		char movement;
+
+		System.out.println("Mova o Heroi usando: ASWD");
+
+		movement = read.next().charAt(0);
+		movement = Character.toLowerCase(movement);
+		
+		return movement;
+	}
+	
 	public static void main(String[] args) {
 
 		Game g = new Game();
@@ -10,9 +25,10 @@ public class Launcher {
 		while(!g.gameLost && !g.gameWon){
 			g.clearScreen();
 			g.drawMaze();
-			g.updateMaze();
+			char m = getMove();
+			g.updateMaze(m);
 		}
-		g.read.close();
+		read.close();
 		g.clearScreen();
 		if(g.gameWon){
 			System.out.print("Congrats, you won!");
