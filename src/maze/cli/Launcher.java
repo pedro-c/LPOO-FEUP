@@ -50,9 +50,11 @@ public class Launcher {
 	public static void main(String[] args) {
 
 		int mode = menu();
-		Game g = new Game();
+		//criar maze
+		
+		
+		Game g = new Game(mode, 1, 1, 1);
 
-		g.createMaze(mode);
 
 		while(!g.gameLost && !g.gameWon){
 			clearScreen();

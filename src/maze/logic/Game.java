@@ -1,22 +1,70 @@
 package maze.logic;
+import java.awt.Point;
 import java.util.*;
 
 public class Game {
 
+	public enum GameStatus {
+		HeroUnarmed, HeroArmed, HeroDied;
+	}
+	
 	public boolean gameLost = false;
 	public boolean gameWon = false;
+	private GameStatus status;
 	private int mode;
 	private int width = 10, height = 10;
 	private int nDrakes = 1;
 	private int nSwords = 1;
 	private int nExits = 1;
-	private Character[][] Maze = new Character[width][height];
-	Hero hero = new Hero(1, 1, 'H');
+	private char[][] Maze = new char[width][height];
+	Hero hero = new Hero();
 
 	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
 	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
 
+	public Game(int mode, int nDrakes, int nExits, int nSwords, char[][] maze)
+	{
+		this.mode = mode;
+		this.nDrakes = nDrakes;
+		this.nExits = nExits;
+		this.nSwords = nSwords;
+		status = GameStatus.HeroUnarmed;
+		
+		Maze = maze;		
+		
+		outerLoop:
+		for(int i = 0; i < Maze.length; i++)
+			for(int j = 0; j < Maze[i].length; j++)
+				if(Maze[i][j] == 'H')	{
+					hero.line = i;
+					hero.col = j;
+					break outerLoop;
+				}
+	}
+	
+	public Game(int mode, int nDrakes, int nExits, int nSwords)
+	{
+		this.mode = mode;
+		this.nDrakes = nDrakes;
+		this.nExits = nExits;
+		this.nSwords = nSwords;
+		status = GameStatus.HeroUnarmed;
+		
+		createMaze();		
+	}
+	
+	
+	public Point getHeroPosition()
+	{
+		Point p = new Point(hero.line, hero.col);
+		return p;
+	}
+	
+	public GameStatus getStatus() {
+		return status;
+	}
+	
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
 			for (int col = 0; col < width; col++) {
@@ -27,11 +75,12 @@ public class Game {
 		}
 	}
 
-	public void createMaze(int m) {
+	
+	
+	public void createMaze() {
 
 		// Temporario ate criarmos o labirinto de forma aleatoria
 
-		mode = m;
 		Drake d1 = new Drake(3, 1, false);
 		Exit e1 = new Exit(5, 9);
 		Sword s1 = new Sword(4, 1, true);
@@ -101,10 +150,10 @@ public class Game {
 			Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
 
 		// Colocar Herói
-		Maze[hero.line][hero.col] = hero.symbol;
+		Maze[hero.line][hero.col] = hero.symbol; 
 
 	}
-
+	
 	public boolean checkExit(int line, int col) {
 		boolean ret = false;
 
@@ -169,7 +218,13 @@ public class Game {
 		if(hero.symbol != 'A' && Maze[line][col] == 'D')
 		{
 			gameLost = true;
+			status = GameStatus.HeroDied;
 			return; //No need to do anything else, the game is lost
+		}
+		
+		if(hero.symbol != 'A' && Maze[line][col] == 'd')
+		{
+			return; //Does nothing
 		}
 
 		boolean allDead = true;
@@ -281,7 +336,7 @@ public class Game {
 
 
 
-		// Colocar Herói
+		// Puts Hero
 		Maze[hero.line][hero.col] = hero.symbol;
 
 	}
