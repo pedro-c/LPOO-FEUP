@@ -33,6 +33,7 @@ public class Game {
 		
 		Maze = maze;		
 		
+		//searches and updates hero's coordinates according to the given maze
 		outerLoop:
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
@@ -41,6 +42,26 @@ public class Game {
 					hero.col = j;
 					break outerLoop;
 				}
+		
+		//searches all swords and adds them to the array
+		for(int i = 0; i < Maze.length; i++)
+			for(int j = 0; j < Maze[i].length; j++)
+				if(Maze[i][j] == 'S')	{
+					Sword s1 = new Sword(i,j);
+					Swords.add(s1);
+					
+				}
+		
+		//searches all dragons and adds them to the array
+		for(int i = 0; i < Maze.length; i++)
+			for(int j = 0; j < Maze[i].length; j++)
+				if(Maze[i][j] == 'D')	{
+					Drake d1 = new Drake(i,j);
+					Drakes.add(d1);
+					
+				}
+		
+		
 	}
 	
 	public Game(int mode, int nDrakes, int nExits, int nSwords)
@@ -65,6 +86,16 @@ public class Game {
 		return status;
 	}
 	
+	public boolean getDrakeStatus(int line, int col){
+		
+		boolean ret = false;
+		for(int i = 0; i < Drakes.size(); i++){
+			if(Drakes.get(i).line == line && Drakes.get(i).col == col)
+				ret = Drakes.get(i).dead;
+		}
+		return ret;	
+	}
+	
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
 			for (int col = 0; col < width; col++) {
@@ -81,9 +112,9 @@ public class Game {
 
 		// Temporario ate criarmos o labirinto de forma aleatoria
 
-		Drake d1 = new Drake(3, 1, false);
+		Drake d1 = new Drake(3, 1);
 		Exit e1 = new Exit(5, 9);
-		Sword s1 = new Sword(4, 1, true);
+		Sword s1 = new Sword(4, 1);
 
 		Exits.add(e1);
 		Drakes.add(d1);
@@ -204,6 +235,7 @@ public class Game {
 			hero.symbol = 'A';
 			hero.line = newLine;
 			hero.col = newCol;
+			status = GameStatus.HeroArmed;
 			updateSword(newCol, newLine, false);
 		} 
 		else

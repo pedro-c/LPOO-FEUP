@@ -6,10 +6,10 @@ public class Drake {
 	public boolean dead;
 	public boolean asleep;
 	
-	public Drake (int line, int col, boolean dead ){
+	public Drake (int line, int col){
 		this.line=line;
 		this.col=col;
-		this.dead=dead;
+		this.dead=false;
 		this.asleep=false;
 	}
 	
