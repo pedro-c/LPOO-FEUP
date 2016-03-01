@@ -39,7 +39,7 @@ public class Game {
 
 		Drake d1 = new Drake(3, 1, false);
 		Exit e1 = new Exit(5, 9);
-		Sword s1 = new Sword(8, 1, true);
+		Sword s1 = new Sword(4, 1, true);
 
 		Exits.add(e1);
 		Drakes.add(d1);
@@ -189,6 +189,38 @@ public class Game {
 				Exits.get(i).open = true;
 	}
 
+	public void moveDrake(Drake d)
+	{
+		Random rand = new Random();
+		int drakeMove = rand.nextInt(5);
+		int nextLine = d.line;
+		int nextCol = d.col;
+
+		switch(drakeMove)
+		{
+		case 0:
+			break;
+		case 1:
+			nextCol += 1;
+			break;
+		case 2:
+			nextCol -= 1;
+			break;
+		case 3:
+			nextLine += 1;
+			break;
+		case 4:
+			nextLine -= 1;
+			break;
+		}
+
+		if(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'E'){
+			d.line = nextLine;
+			d.col = nextCol;
+		}
+
+	}
+
 	public void updateMaze(char movement) {
 
 		//cleans the last hero's position
@@ -214,26 +246,30 @@ public class Game {
 		if(Maze[hero.line+1][hero.col] == 'D')
 			killDrakes(hero.line + 1,hero.col);
 
-
-		// Colocar Dragões
+		// Moves and puts Drakes
 		for (int i = 0; i < nDrakes; i++){
-			if(Drakes.get(i).dead){
-				Maze[Drakes.get(i).line][Drakes.get(i).col] = ' ';
-			}
-			else{
+			Maze[Drakes.get(i).line][Drakes.get(i).col] = ' ';
+			if(!Drakes.get(i).dead) //If the drake is dead, don't bother moving it
+			{
+				moveDrake(Drakes.get(i));
 				Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
 			}
 		}
 
-		// Colocar Espadas
+		// Puts Swords
 		for (int i = 0; i < nSwords; i++) {
-			if (Swords.get(i).draw) {
-				Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
-			} 
-			else {
-				Maze[Swords.get(i).line][Swords.get(i).col] = ' ';
+			if (Maze[Swords.get(i).line][Swords.get(i).col] == 'D'){ //Checks if there is drake in the tile
+				if (Swords.get(i).draw)
+					Maze[Swords.get(i).line][Swords.get(i).col] = 'F';
 			}
+			else
+				if (Swords.get(i).draw)
+					Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
+				else
+					Maze[Swords.get(i).line][Swords.get(i).col] = ' ';
 		}
+
+
 
 		// Colocar Herói
 		Maze[hero.line][hero.col] = hero.symbol;
