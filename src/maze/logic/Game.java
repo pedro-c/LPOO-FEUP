@@ -1,9 +1,11 @@
+package maze.logic;
 import java.util.*;
 
 public class Game {
 
 	public boolean gameLost = false;
 	public boolean gameWon = false;
+	private int mode;
 	private int width = 10, height = 10;
 	private int nDrakes = 1;
 	private int nSwords = 1;
@@ -15,14 +17,6 @@ public class Game {
 	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
 
-	public void clearScreen() {
-
-		for(int clear = 0; clear < 1000; clear++) {
-			System.out.println("\n") ;
-		}
-
-	}
-
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
 			for (int col = 0; col < width; col++) {
@@ -33,10 +27,11 @@ public class Game {
 		}
 	}
 
-	public void createMaze() {
+	public void createMaze(int m) {
 
 		// Temporario ate criarmos o labirinto de forma aleatoria
 
+		mode = m;
 		Drake d1 = new Drake(3, 1, false);
 		Exit e1 = new Exit(5, 9);
 		Sword s1 = new Sword(4, 1, true);
@@ -169,9 +164,9 @@ public class Game {
 
 	}
 
-	public void killDrakes(int line, int col) {
+	public void killDrake(int line, int col) {
 
-		if(hero.symbol != 'A')
+		if(hero.symbol != 'A' && Maze[line][col] == 'D')
 		{
 			gameLost = true;
 			return; //No need to do anything else, the game is lost
@@ -191,28 +186,40 @@ public class Game {
 
 	public void moveDrake(Drake d)
 	{
+
+		if(mode == 1) //does not move --> do nothing
+			return;
+
+		int maxRandInt = 3 + mode;
+
 		Random rand = new Random();
-		int drakeMove = rand.nextInt(5);
+		int drakeMove = rand.nextInt(maxRandInt);
 		int nextLine = d.line;
 		int nextCol = d.col;
 
-		switch(drakeMove)
-		{
-		case 0:
-			break;
-		case 1:
-			nextCol += 1;
-			break;
-		case 2:
-			nextCol -= 1;
-			break;
-		case 3:
-			nextLine += 1;
-			break;
-		case 4:
-			nextLine -= 1;
-			break;
-		}
+		if(d.asleep == false)
+			switch(drakeMove)
+			{
+			case 0:
+				break;
+			case 1:
+				nextCol += 1;
+				break;
+			case 2:
+				nextCol -= 1;
+				break;
+			case 3:
+				nextLine += 1;
+				break;
+			case 4:
+				nextLine -= 1;
+				break;
+			case 5:
+				d.asleep = true;
+			}
+		else
+			if(drakeMove < 3) //0, 1, 2
+				d.asleep = false; // 50/50 chance that he wakes up
 
 		if(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'E'){
 			d.line = nextLine;
@@ -237,14 +244,14 @@ public class Game {
 
 		//checks for drakes adjacent to the hero
 
-		if(Maze[hero.line][hero.col-1] == 'D')
-			killDrakes(hero.line,hero.col - 1);
-		if(Maze[hero.line][hero.col+1] == 'D')
-			killDrakes(hero.line,hero.col + 1);
-		if(Maze[hero.line-1][hero.col] == 'D')
-			killDrakes(hero.line - 1,hero.col);
-		if(Maze[hero.line+1][hero.col] == 'D')
-			killDrakes(hero.line + 1,hero.col);
+		if(Maze[hero.line][hero.col-1] == 'D' || Maze[hero.line][hero.col-1] == 'd') //checkar se nao é melhor passar tudo para o KillDrake
+			killDrake(hero.line,hero.col - 1);
+		if(Maze[hero.line][hero.col+1] == 'D' || Maze[hero.line][hero.col+1] == 'd')
+			killDrake(hero.line,hero.col + 1);
+		if(Maze[hero.line-1][hero.col] == 'D' || Maze[hero.line-1][hero.col] == 'd')
+			killDrake(hero.line - 1,hero.col);
+		if(Maze[hero.line+1][hero.col] == 'D' || Maze[hero.line+1][hero.col] == 'd')
+			killDrake(hero.line + 1,hero.col);
 
 		// Moves and puts Drakes
 		for (int i = 0; i < nDrakes; i++){
@@ -252,7 +259,10 @@ public class Game {
 			if(!Drakes.get(i).dead) //If the drake is dead, don't bother moving it
 			{
 				moveDrake(Drakes.get(i));
-				Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
+				if(Drakes.get(i).asleep == false)
+					Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
+				else
+					Maze[Drakes.get(i).line][Drakes.get(i).col] = 'd';
 			}
 		}
 

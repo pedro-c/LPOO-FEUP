@@ -1,3 +1,4 @@
+package maze.logic;
 
 public class Exit {
 
