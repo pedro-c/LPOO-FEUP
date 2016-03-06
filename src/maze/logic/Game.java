@@ -46,7 +46,7 @@ public class Game {
 		//searches all swords and adds them to the array
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
-				if(Maze[i][j] == 'S')	{
+				if(Maze[i][j] == 'E')	{
 					Sword s1 = new Sword(i,j);
 					Swords.add(s1);
 					
@@ -61,6 +61,14 @@ public class Game {
 					
 				}
 		
+		// searches all Exits and adds them to the array
+		for (int i = 0; i < Maze.length; i++)
+			for (int j = 0; j < Maze[i].length; j++)
+				if (Maze[i][j] == 'S') {
+					Exit e1 = new Exit(i, j);
+					Exits.add(e1);
+
+				}
 		
 	}
 	
@@ -115,7 +123,12 @@ public class Game {
 		Drake d1 = new Drake(3, 1);
 		Exit e1 = new Exit(5, 9);
 		Sword s1 = new Sword(4, 1);
-
+		
+		// Colocar Herói
+		Maze[hero.line][hero.col] = hero.symbol;
+		hero.line=1;
+		hero.col=1;
+		
 		Exits.add(e1);
 		Drakes.add(d1);
 		Swords.add(s1);
@@ -180,8 +193,7 @@ public class Game {
 		for (int i = 0; i < nSwords; i++)
 			Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
 
-		// Colocar Herói
-		Maze[hero.line][hero.col] = hero.symbol; 
+
 
 	}
 	
@@ -190,9 +202,10 @@ public class Game {
 
 		for(int i = 0; i < nExits; i++)
 			if(Exits.get(i).col == col && Exits.get(i).line == line)
-				ret = Exits.get(i).open;
+				return Exits.get(i).open;
 
 		return ret;
+
 	}
 
 	public void updateSword(int col, int line, boolean draw) {
@@ -208,6 +221,9 @@ public class Game {
 
 		int newLine = hero.line;
 		int newCol = hero.col;
+		
+		//clears the hero previous position
+		Maze[newLine][newCol] = ' ';
 
 		switch (movement) {
 		case 'a':
@@ -226,6 +242,7 @@ public class Game {
 
 		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
 			gameWon = true;
+			return true;
 		} 			
 		else if (Maze[newLine][newCol] == ' ') {
 			hero.line = newLine;
@@ -238,9 +255,12 @@ public class Game {
 			status = GameStatus.HeroArmed;
 			updateSword(newCol, newLine, false);
 		} 
-		else
+		else{
+			Maze[hero.line][hero.col] = 'H';
 			return false; //Invalid Movement
-
+		}
+			
+		updateMaze();
 		return true; //Hero moved successfully
 
 	}
@@ -267,8 +287,10 @@ public class Game {
 				allDead = false;
 		}
 		if(allDead)
-			for (int i = 0; i < nExits; i++)
+			for (int i = 0; i < nExits; i++){
 				Exits.get(i).open = true;
+			}
+
 	}
 
 	public void moveDrake(Drake d)
@@ -333,11 +355,11 @@ public class Game {
 
 		if(Maze[hero.line][hero.col-1] == 'D' || Maze[hero.line][hero.col-1] == 'd') //checkar se nao é melhor passar tudo para o KillDrake
 			killDrake(hero.line,hero.col - 1);
-		if(Maze[hero.line][hero.col+1] == 'D' || Maze[hero.line][hero.col+1] == 'd')
+		else if(Maze[hero.line][hero.col+1] == 'D' || Maze[hero.line][hero.col+1] == 'd')
 			killDrake(hero.line,hero.col + 1);
-		if(Maze[hero.line-1][hero.col] == 'D' || Maze[hero.line-1][hero.col] == 'd')
+		else if(Maze[hero.line-1][hero.col] == 'D' || Maze[hero.line-1][hero.col] == 'd')
 			killDrake(hero.line - 1,hero.col);
-		if(Maze[hero.line+1][hero.col] == 'D' || Maze[hero.line+1][hero.col] == 'd')
+		else if(Maze[hero.line+1][hero.col] == 'D' || Maze[hero.line+1][hero.col] == 'd')
 			killDrake(hero.line + 1,hero.col);
 
 		// Moves and puts Drakes
@@ -370,7 +392,54 @@ public class Game {
 
 		// Puts Hero
 		Maze[hero.line][hero.col] = hero.symbol;
+		return;
+	}
+	
+	public void updateMaze() {
 
+
+		//checks for drakes adjacent to the hero
+
+		if(Maze[hero.line][hero.col-1] == 'D' || Maze[hero.line][hero.col-1] == 'd') //checkar se nao é melhor passar tudo para o KillDrake
+			killDrake(hero.line,hero.col - 1);
+		else if(Maze[hero.line][hero.col+1] == 'D' || Maze[hero.line][hero.col+1] == 'd')
+			killDrake(hero.line,hero.col + 1);
+		else if(Maze[hero.line-1][hero.col] == 'D' || Maze[hero.line-1][hero.col] == 'd')
+			killDrake(hero.line - 1,hero.col);
+		else if(Maze[hero.line+1][hero.col] == 'D' || Maze[hero.line+1][hero.col] == 'd')
+			killDrake(hero.line + 1,hero.col);
+
+		// Moves and puts Drakes
+		for (int i = 0; i < nDrakes; i++){
+			Maze[Drakes.get(i).line][Drakes.get(i).col] = ' ';
+			if(!Drakes.get(i).dead) //If the drake is dead, don't bother moving it
+			{
+				moveDrake(Drakes.get(i));
+				if(Drakes.get(i).asleep == false)
+					Maze[Drakes.get(i).line][Drakes.get(i).col] = 'D';
+				else
+					Maze[Drakes.get(i).line][Drakes.get(i).col] = 'd';
+			}
+		}
+
+		// Puts Swords
+		for (int i = 0; i < nSwords; i++) {
+			if (Maze[Swords.get(i).line][Swords.get(i).col] == 'D'){ //Checks if there is drake in the tile
+				if (Swords.get(i).draw)
+					Maze[Swords.get(i).line][Swords.get(i).col] = 'F';
+			}
+			else
+				if (Swords.get(i).draw)
+					Maze[Swords.get(i).line][Swords.get(i).col] = 'E';
+				else
+					Maze[Swords.get(i).line][Swords.get(i).col] = ' ';
+		}
+
+
+
+		// Puts Hero
+		Maze[hero.line][hero.col] = hero.symbol;
+		return;
 	}
 
 }
