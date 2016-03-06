@@ -84,6 +84,7 @@ public class TestMazeWithStaticDragon {
 		assertEquals(false, g.gameWon);
 	}
 	
+	@Test
 	public void testUnsuccessfulExiWithSword() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(false, g.gameWon);
