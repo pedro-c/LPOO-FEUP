@@ -20,22 +20,22 @@ public class TestMazeWithStaticDragon {
 	public void testMoveHeroToFreeCell() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
-		g.updateHero('a');
+		g.moveHeroLeft();
 		assertEquals(new Point(1, 2), g.getHeroPosition());
 	}
 	@Test
 	public void testMoveHeroToWall() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
-		g.updateHero('w');
+		g.moveHeroUp();
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 	}
 	@Test
 	public void testMoveHeroToSword() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(GameStatus.HeroUnarmed, g.getStatus());
-		g.updateHero('a');
-		g.updateHero('a');
+		g.moveHeroLeft();
+		g.moveHeroLeft();
 		assertEquals(GameStatus.HeroArmed, g.getStatus());
 	}
 	
@@ -44,7 +44,7 @@ public class TestMazeWithStaticDragon {
 	public void testHeroDies() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(GameStatus.HeroUnarmed, g.getStatus());
-		g.updateHero('s');
+		g.moveHeroDown();
 		assertEquals(GameStatus.HeroDied, g.getStatus());
 	}
 	
@@ -52,11 +52,11 @@ public class TestMazeWithStaticDragon {
 	public void testHeroKills() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(false, g.getDrakeStatus(3, 3));
-		g.updateHero('a');
-		g.updateHero('a');
-		g.updateHero('s');
-		g.updateHero('s');
-		g.updateHero('d');
+		g.moveHeroLeft();
+		g.moveHeroLeft();
+		g.moveHeroDown();
+		g.moveHeroDown();
+		g.moveHeroRight();
 		assertEquals(true, g.getDrakeStatus(3, 3));
 	}
 	
@@ -64,15 +64,15 @@ public class TestMazeWithStaticDragon {
 	public void testVictory() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(false, g.gameWon);
-		g.updateHero('a');
-		g.updateHero('a');
-		g.updateHero('s');
-		g.updateHero('s');
-		g.updateHero('d');
-		g.updateHero('d');
-		g.updateHero('w');
-		g.updateHero('w');
-		g.updateHero('d');		
+		g.moveHeroLeft();
+		g.moveHeroLeft();
+		g.moveHeroDown();
+		g.moveHeroDown();
+		g.moveHeroRight();
+		g.moveHeroRight();
+		g.moveHeroUp();
+		g.moveHeroUp();
+		g.moveHeroRight();		
 		assertEquals(true, g.gameWon);
 	}
 	
@@ -80,18 +80,18 @@ public class TestMazeWithStaticDragon {
 	public void testUnsuccessfulExitWithoutSword() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(false, g.gameWon);
-		g.updateHero('d');
+		g.moveHeroRight();
 		assertEquals(false, g.gameWon);
 	}
 	
 	public void testUnsuccessfulExiWithSword() {
 		Game g = new Game(1, 1, 1, 1, m1);
 		assertEquals(false, g.gameWon);
-		g.updateHero('a');
-		g.updateHero('a');
-		g.updateHero('d');
-		g.updateHero('d');
-		g.updateHero('d');
+		g.moveHeroLeft();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroRight();
+		g.moveHeroRight();
 		assertEquals(false, g.gameWon);
 	}
 	

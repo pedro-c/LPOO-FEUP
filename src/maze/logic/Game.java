@@ -217,6 +217,146 @@ public class Game {
 		}
 	}
 
+	public boolean moveHeroUp() {
+
+		int newLine = hero.line;
+		int newCol = hero.col;
+		
+		//clears the hero previous position
+		Maze[newLine][newCol] = ' ';
+		
+		newLine-=1;
+
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+			return true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			status = GameStatus.HeroArmed;
+			updateSword(newCol, newLine, false);
+		} 
+		else{
+			Maze[hero.line][hero.col] = 'H';
+			return false; //Invalid Movement
+		}
+			
+		updateMaze();
+		return true; //Hero moved successfully
+
+	}
+	
+	public boolean moveHeroDown() {
+
+		int newLine = hero.line;
+		int newCol = hero.col;
+		
+		//clears the hero previous position
+		Maze[newLine][newCol] = ' ';
+		
+		newLine+=1;
+
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+			return true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			status = GameStatus.HeroArmed;
+			updateSword(newCol, newLine, false);
+		} 
+		else{
+			Maze[hero.line][hero.col] = 'H';
+			return false; //Invalid Movement
+		}
+			
+		updateMaze();
+		return true; //Hero moved successfully
+
+	}
+	
+	public boolean moveHeroRight() {
+
+		int newLine = hero.line;
+		int newCol = hero.col;
+		
+		//clears the hero previous position
+		Maze[newLine][newCol] = ' ';
+		
+		newCol+=1;
+
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+			return true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			status = GameStatus.HeroArmed;
+			updateSword(newCol, newLine, false);
+		} 
+		else{
+			Maze[hero.line][hero.col] = 'H';
+			return false; //Invalid Movement
+		}
+			
+		updateMaze();
+		return true; //Hero moved successfully
+
+	}
+	
+	public boolean moveHeroLeft() {
+
+		int newLine = hero.line;
+		int newCol = hero.col;
+		
+		//clears the hero previous position
+		Maze[newLine][newCol] = ' ';
+		
+		newCol-=1;
+
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+			return true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			status = GameStatus.HeroArmed;
+			updateSword(newCol, newLine, false);
+		} 
+		else{
+			Maze[hero.line][hero.col] = 'H';
+			return false; //Invalid Movement
+		}
+			
+		updateMaze();
+		return true; //Hero moved successfully
+
+	}
+	
 	public boolean updateHero(char movement) {
 
 		int newLine = hero.line;
