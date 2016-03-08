@@ -13,9 +13,9 @@ public class Game {
 	private GameStatus status;
 	private int mode;
 	public int width = 10, height = 10;
-	private int nDrakes = 1;
+	public int nDrakes = 1;
 	public int nSwords = 1;
-	private int nExits = 1;
+	public int nExits = 1;
 	public char[][] Maze = new char[width][height];
 	Hero hero = new Hero();
 	public ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);

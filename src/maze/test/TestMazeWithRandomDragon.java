@@ -72,6 +72,53 @@ public class TestMazeWithRandomDragon {
 			};
 	
 	@Test
+	public void DoesntKillAllDrakes(){
+		Game g = new Game(1, 1, 1, 1, m1);
+		boolean outcome1 = false;
+		Drake d1 = new Drake(3,1);
+		Drake d2 = new Drake(2,1);
+		Drake d3 = new Drake(3,2);
+		g.Drakes.add(d1);
+		g.Drakes.add(d2);
+		g.Drakes.add(d3);
+		g.nDrakes+=3;
+		while (! outcome1) {
+			g.moveHeroLeft();
+			g.moveHeroLeft();
+			if (!g.checksAllDrakes())
+				outcome1 = true;
+			else
+				fail("some error message");
+		}
+	}
+	
+	@Test
+	public void KillsAllDrakes(){
+		Game g = new Game(1, 1, 1, 1, m1);
+		boolean outcome1 = false;
+		Drake d1 = new Drake(3,1);
+		Drake d2 = new Drake(2,1);
+		Drake d3 = new Drake(3,2);
+		g.Drakes.add(d1);
+		g.Drakes.add(d2);
+		g.Drakes.add(d3);
+		g.nDrakes+=3;
+		while (! outcome1) {
+			g.moveHeroLeft();
+			g.moveHeroLeft();
+			g.moveHeroDown();
+			g.moveHeroDown();
+			g.moveHeroRight();
+			g.moveHeroRight();
+			if (g.checksAllDrakes())
+				outcome1 = true;
+			else
+				fail("some error message");
+		}
+	}
+	
+	
+	@Test
 	public void putsDrakeOverSword(){
 		boolean outcome1 = false;			
 		while (! outcome1) {
@@ -225,40 +272,35 @@ public class TestMazeWithRandomDragon {
 		}
 	}
 	
-	@Test
+	@Test(timeout=1000)
 	public void testHeroDies() {
-		Game g = new Game(3, 1, 1, 1, m1);
-		boolean outcome1 = false;
-		while (! outcome1) {
-			assertEquals(GameStatus.HeroUnarmed, g.getStatus());
+		boolean outcome1 = false, outcome2 = false;
+		while (! outcome1 || !outcome2) {
+			Game g = new Game(3, 1, 1, 1, m1);
 			g.moveHeroDown();
 			if (GameStatus.HeroDied == g.getStatus())
 				outcome1 = true;
+			else if(GameStatus.HeroUnarmed == g.getStatus())
+				outcome2 = true;
 			else
 				fail("some error message");
 		}
 	}
 	
-	
-	
 	@Test
-	public void DoesntKillAllDrakes(){
-		Game g = new Game(3, 4, 1, 1, m1);
+	public void drakeAwakes(){
 		boolean outcome1 = false;
-		Drake d1 = new Drake(3,1);
-		Drake d2 = new Drake(2,1);
-		Drake d3 = new Drake(3,2);
-		g.Drakes.add(d1);
-		g.Drakes.add(d2);
-		g.Drakes.add(d3);
 		while (! outcome1) {
-			g.moveHeroLeft();
-			g.moveHeroLeft();
-			if (!g.checksAllDrakes())
+			Game g = new Game(3, 1, 1, 1, m2);
+			g.Drakes.get(0).asleep=true;
+			g.moveDrake(g.Drakes.get(0));
+			if (g.Drakes.get(0).asleep==false)
 				outcome1 = true;
 			else
 				fail("some error message");
 		}
 	}
+	
+
 	
 }
