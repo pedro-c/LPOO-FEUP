@@ -71,6 +71,46 @@ public class TestMazeWithRandomDragon {
 			{'X', 'X', 'X', 'X', 'X', 'X'}
 			};
 	
+	char[][] m8 = {
+			{'X', 'X', 'X', 'X', 'X'},
+			{'X', 'E', 'X', ' ', 'S'},
+			{'X', 'X', 'H', 'X', 'X'},
+			{'X', ' ', 'X', 'D', 'X'},
+			{'X', 'X', 'X', 'X', 'X'}
+			};
+	
+	@Test(timeout=1000)
+	public void triesToExitWithoutKillingDragon(){
+		boolean outcome1 = false;			
+		while (! outcome1) {
+			Game g = new Game(1, 1, 1, 1, m1);
+			g.moveHeroRight();
+			if (g.checkExit(1, 4) == false)
+				outcome1 = true;
+			else
+				fail("some error message");
+		}
+	}
+	
+	
+	@Test(timeout=1000)
+	public void heroDoesntMove(){
+		boolean outcome1 = false, outcome2 = false, outcome3=false, outcome4 = false;			
+		while (! outcome1 || !outcome2 || !outcome3 || !outcome4) {
+			Game g = new Game(1, 1, 1, 1, m8);
+			if (g.moveHeroDown() == false)
+				outcome1 = true;
+			if (g.moveHeroLeft() == false)
+				outcome2 = true;
+			if (g.moveHeroRight() == false)
+				outcome3 = true;
+			if (g.moveHeroUp() == false)
+				outcome4 = true;
+			else
+				fail("some error message");
+		}
+	}
+	
 	@Test
 	public void DoesntKillAllDrakes(){
 		Game g = new Game(1, 1, 1, 1, m1);
@@ -274,14 +314,12 @@ public class TestMazeWithRandomDragon {
 	
 	@Test(timeout=1000)
 	public void testHeroDies() {
-		boolean outcome1 = false, outcome2 = false;
-		while (! outcome1 || !outcome2) {
-			Game g = new Game(3, 1, 1, 1, m1);
-			g.moveHeroDown();
+		boolean outcome1 = false;
+		while (! outcome1) {
+			Game g = new Game(1, 1, 1, 1, m1);
+			g.moveHeroDown();							
 			if (GameStatus.HeroDied == g.getStatus())
 				outcome1 = true;
-			else if(GameStatus.HeroUnarmed == g.getStatus())
-				outcome2 = true;
 			else
 				fail("some error message");
 		}
@@ -289,17 +327,35 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void drakeAwakes(){
-		boolean outcome1 = false;
-		while (! outcome1) {
+		boolean outcome1 = false, outcome2 = false;
+		while (! outcome1 || !outcome2) {
 			Game g = new Game(3, 1, 1, 1, m2);
 			g.Drakes.get(0).asleep=true;
 			g.moveDrake(g.Drakes.get(0));
 			if (g.Drakes.get(0).asleep==false)
 				outcome1 = true;
+			else if(g.Drakes.get(0).asleep==true)
+				outcome2 = true;
 			else
 				fail("some error message");
 		}
 	}
+	
+	@Test
+	public void drakeAsleep(){
+		boolean outcome1 = false;
+		while (! outcome1) {
+			Game g = new Game(1, 1, 1, 1, m1);
+			g.Drakes.get(0).asleep=true;
+			g.updateMaze();
+			g.killDrake(3,3);
+			if (g.Drakes.get(0).dead==false)
+				outcome1 = true;
+			else
+				fail("some error message");
+		}
+	}
+	
 	
 
 	

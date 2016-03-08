@@ -214,7 +214,7 @@ public class Game {
 
 		for(int i = 0; i < nExits; i++)
 			if(Exits.get(i).col == col && Exits.get(i).line == line)
-				return Exits.get(i).open;
+				ret= Exits.get(i).open;
 
 		return ret;
 
