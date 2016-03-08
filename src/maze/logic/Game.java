@@ -12,16 +12,15 @@ public class Game {
 	public boolean gameWon = false;
 	private GameStatus status;
 	private int mode;
-	private int width = 10, height = 10;
+	public int width = 10, height = 10;
 	private int nDrakes = 1;
-	private int nSwords = 1;
+	public int nSwords = 1;
 	private int nExits = 1;
-	private char[][] Maze = new char[width][height];
+	public char[][] Maze = new char[width][height];
 	Hero hero = new Hero();
-
-	ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
-	ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
-	ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
+	public ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
+	public ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
+	public ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
 
 	public Game(int mode, int nDrakes, int nExits, int nSwords, char[][] maze)
 	{
@@ -71,7 +70,7 @@ public class Game {
 				}
 		
 	}
-	
+	/*
 	public Game(int mode, int nDrakes, int nExits, int nSwords)
 	{
 		this.mode = mode;
@@ -82,12 +81,24 @@ public class Game {
 		
 		createMaze();		
 	}
-	
+	*/
 	
 	public Point getHeroPosition()
 	{
 		Point p = new Point(hero.line, hero.col);
 		return p;
+	}
+	
+	public ArrayList<Point> getDrakesPositions(){
+		
+		ArrayList<Point> Positions = new ArrayList<Point>(nDrakes);
+		
+		for(int i=0; i<nDrakes; i++){
+			Point p = new Point(Drakes.get(i).line,Drakes.get(i).col);
+			Positions.add(p);
+		}
+				
+		return Positions;
 	}
 	
 	public GameStatus getStatus() {
@@ -104,6 +115,7 @@ public class Game {
 		return ret;	
 	}
 	
+	/*
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
 			for (int col = 0; col < width; col++) {
@@ -113,9 +125,9 @@ public class Game {
 			System.out.println();
 		}
 	}
-
+	 */
 	
-	
+/*
 	public void createMaze() {
 
 		// Temporario ate criarmos o labirinto de forma aleatoria
@@ -196,7 +208,7 @@ public class Game {
 
 
 	}
-	
+	*/
 	public boolean checkExit(int line, int col) {
 		boolean ret = false;
 
@@ -357,6 +369,7 @@ public class Game {
 
 	}
 	
+	/*
 	public boolean updateHero(char movement) {
 
 		int newLine = hero.line;
@@ -405,6 +418,8 @@ public class Game {
 
 	}
 
+*/
+	
 	public void killDrake(int line, int col) {
 
 		if(hero.symbol != 'A' && Maze[line][col] == 'D')
@@ -431,6 +446,16 @@ public class Game {
 				Exits.get(i).open = true;
 			}
 
+	}
+	
+	public boolean checksAllDrakes(){
+	
+		for (int i = 0; i < nDrakes; i++) {
+			if(Drakes.get(i).dead==false){
+				return false;
+			}	
+		}
+		return true;		
 	}
 
 	public void moveDrake(Drake d)
@@ -477,6 +502,7 @@ public class Game {
 
 	}
 
+	/*
 	public void updateMaze(char movement) {
 
 		//cleans the last hero's position
@@ -530,10 +556,12 @@ public class Game {
 
 
 
+
 		// Puts Hero
 		Maze[hero.line][hero.col] = hero.symbol;
 		return;
 	}
+*/	
 	
 	public void updateMaze() {
 

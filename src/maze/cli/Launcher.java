@@ -47,20 +47,53 @@ public class Launcher {
 		return movement;
 	}
 
+	public static void drawMaze(Game g)
+	{
+		for (int line = 0; line < g.height; line++) {
+			for (int col = 0; col < g.width; col++) {
+				System.out.print(g.Maze[line][col]);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
+	
 	public static void main(String[] args) {
 
 		int mode = menu();
-		//criar maze
+		//a alterar para maze aleatorio
+		char[][] m1 = {
+				{'X', 'X', 'X', 'X', 'X'},
+				{'X', 'E', ' ', 'H', 'S'},
+				{'X', ' ', 'X', ' ', 'X'},
+				{'X', ' ', ' ', 'D', 'X'},
+				{'X', 'X', 'X', 'X', 'X'}
+				};
 		
 		
-		Game g = new Game(mode, 1, 1, 1);
+		Game g = new Game(mode, 1, 1, 1, m1);
 
 
 		while(!g.gameLost && !g.gameWon){
 			clearScreen();
-			g.drawMaze();
+			drawMaze(g);
 			char m = getMove();
-			g.updateMaze(m);
+			switch(m){
+				case 'w':
+					g.moveHeroUp();
+					break;
+				case 's':
+					g.moveHeroUp();
+					break;
+				case 'a':
+					g.moveHeroLeft();
+					break;
+				case 'd':
+					g.moveHeroRight();
+					break;
+			}	
+			g.updateMaze();
+			//g.updateMaze(m);
 		}
 		read.close();
 		clearScreen();
