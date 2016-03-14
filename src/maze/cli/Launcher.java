@@ -86,7 +86,7 @@ public class Launcher {
 					g.moveHeroUp();
 					break;
 				case 's':
-					g.moveHeroUp();
+					g.moveHeroDown();
 					break;
 				case 'a':
 					g.moveHeroLeft();
