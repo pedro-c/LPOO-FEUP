@@ -49,8 +49,8 @@ public class Launcher {
 
 	public static void drawMaze(Game g)
 	{
-		for (int line = 0; line < g.height; line++) {
-			for (int col = 0; col < g.width; col++) {
+		for (int line = 0; line < g.Maze.length; line++) {
+			for (int col = 0; col < g.Maze.length; col++) {
 				System.out.print(g.Maze[line][col]);
 				System.out.print(" ");
 			}
@@ -70,8 +70,11 @@ public class Launcher {
 				{'X', 'X', 'X', 'X', 'X'}
 				};
 		
+		MazeBuilder mb = new MazeBuilder(11, 1, 1);
 		
-		Game g = new Game(mode, 1, 1, 1, m1);
+		char[][] mt = mb.maze;
+		
+		Game g = new Game(mode, 1, 1, 1, mt);
 
 
 		while(!g.gameLost && !g.gameWon){
