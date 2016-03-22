@@ -258,7 +258,7 @@ public class MazeBuilder {
 
 		//Places Swords
 
-		for(int i = 0; i < nDrakes; i++)
+		for(int i = 0; i < nSwords; i++)
 		{
 			placed = false;
 			while(!placed)

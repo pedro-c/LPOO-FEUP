@@ -34,6 +34,7 @@ public class Interface {
 	private JButton btnLeft;
 	private JButton btnRight;
 	private JPanel panel;
+	private JButton newMaze;
 
 	/**
 	 * Launch the application.
@@ -63,7 +64,6 @@ public class Interface {
 	 */
 	private void initialize() {
 		frmMaze = new JFrame();
-		frmMaze.setExtendedState(Frame.MAXIMIZED_HORIZ);
 		frmMaze.getContentPane().setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().setMinimumSize(new Dimension(50, 50));
 		frmMaze.setMinimumSize(new Dimension(500, 400));
@@ -77,11 +77,13 @@ public class Interface {
 		frmMaze.getContentPane().add(fldSize, "cell 2 0,alignx left,aligny center");
 		fldSize.setColumns(10);
 		fldSize.setText("11"); //default value
+
 		
 		JLabel mazeSize = new JLabel("Maze Size");
 		mazeSize.setPreferredSize(new Dimension(290, 80));
 		mazeSize.setMaximumSize(new Dimension(290, 80));
 		frmMaze.getContentPane().add(mazeSize, "cell 0 0,growx,aligny center");
+		
 	
 		
 		JLabel drakesNumber = new JLabel("Number of Dragons");
@@ -173,22 +175,36 @@ public class Interface {
 		lblcurretnState.setMaximumSize(new Dimension(525, 80));
 		frmMaze.getContentPane().add(lblcurretnState, "cell 0 9 9 1,growx,aligny top");
 		
-		JButton newMaze = new JButton("New Maze");
+		newMaze = new JButton("New Maze");
 		newMaze.setMinimumSize(new Dimension(40, 25));
 		newMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		newMaze.setMaximumSize(new Dimension(455, 125));
 		newMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				
 				btnLeft.setEnabled(true);
 				btnRight.setEnabled(true);
 				btnUp.setEnabled(true);
 				btnDown.setEnabled(true);
 				
-				MazeBuilder mb = new MazeBuilder(Integer.parseInt(fldSize.getText()), 1, 1);
-				char[][] mt = mb.maze;
-				g = new Game(gameMode.getSelectedIndex()+1, Integer.parseInt(fldDrakes.getText()), 1, 1, mt);
-				printMaze.setText(g.toString());
+				if(Integer.parseInt(fldSize.getText()) < 5){
+					lblcurretnState.setText("Maze is too small!");
+				}else if(Integer.parseInt(fldSize.getText()) > 39)
+				{
+					lblcurretnState.setText("Maze is too Big!");	
+				}else{
+					int x=Integer.parseInt(fldSize.getText());
+					if((x % 2) == 0){
+						x++;
+					}
+					MazeBuilder mb = new MazeBuilder(x, Integer.parseInt(fldDrakes.getText()), 1);
+					char[][] mt = mb.maze;
+					g = new Game(gameMode.getSelectedIndex()+1, Integer.parseInt(fldDrakes.getText()), 1, 1, mt);
+					printMaze.setText(g.toString());
+				}
+				
+
 				
 			}
 		});
@@ -202,6 +218,7 @@ public class Interface {
 	
 	}
 	
+
 	private void updateGame(int i){
 		switch(i){
 		case 0:
