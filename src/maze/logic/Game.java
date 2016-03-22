@@ -83,6 +83,21 @@ public class Game {
 	}
 	*/
 	
+	@Override
+	public String toString()
+	{
+		String s = "";
+		for (int line = 0; line < Maze.length; line++) {
+			for (int col = 0; col < Maze.length; col++) {
+				s+=Maze[line][col];
+				s+=" ";
+			}
+			s+="\n";
+		}
+		return s;
+	}
+
+	
 	public Point getHeroPosition()
 	{
 		Point p = new Point(hero.line, hero.col);

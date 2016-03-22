@@ -124,6 +124,7 @@ public class MazeBuilder {
 
 
 	}
+	
 
 	public boolean deadEnd()
 	{
