@@ -17,9 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Dimension;
 import net.miginfocom.swing.MigLayout;
-import java.awt.ComponentOrientation;
 import javax.swing.JPanel;
-import java.awt.Frame;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Interface {
 
@@ -123,6 +123,23 @@ public class Interface {
 		frmMaze.getContentPane().add(btnExit, "cell 3 2 6 1,alignx center,aligny top");
 		
 		printMaze = new JTextArea();
+		printMaze.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char key;
+				key=e.getKeyChar();
+				if(key=='w'){
+					updateGame(0);
+				}else if(key=='s'){
+					updateGame(1);
+				}else if(key=='a'){
+					updateGame(2);
+				}else if(key=='d'){
+					updateGame(3);
+				}
+			}
+		});
+		
 		printMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		printMaze.setFont(new Font("Courier New", Font.PLAIN, 20));
 		printMaze.setEditable(false);
@@ -134,6 +151,12 @@ public class Interface {
 		frmMaze.getContentPane().add(panel, "flowx,cell 5 3");
 		
 		btnUp = new JButton("Up");
+		btnUp.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
 		btnUp.setMinimumSize(new Dimension(65, 25));
 		btnUp.setPreferredSize(new Dimension(65, 25));
 		btnUp.setMaximumSize(new Dimension(225, 125));
@@ -147,6 +170,12 @@ public class Interface {
 		});
 		
 		btnLeft = new JButton("Left");
+		btnLeft.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
 		btnLeft.setMaximumSize(new Dimension(265, 125));
 		frmMaze.getContentPane().add(btnLeft, "cell 4 6 2 1,growx,aligny top");
 		
@@ -157,6 +186,12 @@ public class Interface {
 		});
 		
 		btnRight = new JButton("Right");
+		btnRight.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
 		btnRight.setMaximumSize(new Dimension(305, 125));
 		frmMaze.getContentPane().add(btnRight, "cell 7 6 2 1,growx,aligny top");
 		
@@ -167,6 +202,12 @@ public class Interface {
 		});
 		
 		btnDown = new JButton("Down");
+		btnDown.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
 		btnDown.setMaximumSize(new Dimension(325, 125));
 		frmMaze.getContentPane().add(btnDown, "cell 3 8 6 1,alignx center,aligny top");
 		
@@ -202,9 +243,8 @@ public class Interface {
 					char[][] mt = mb.maze;
 					g = new Game(gameMode.getSelectedIndex()+1, Integer.parseInt(fldDrakes.getText()), 1, 1, mt);
 					printMaze.setText(g.toString());
+					lblcurretnState.setText("Pode jogar!");
 				}
-				
-
 				
 			}
 		});
@@ -218,6 +258,20 @@ public class Interface {
 	
 	}
 	
+	private void keyMovement(KeyEvent e){
+			char key;
+			key=e.getKeyChar();
+			if(key=='w'){
+				updateGame(0);
+			}else if(key=='s'){
+				updateGame(1);
+			}else if(key=='a'){
+				updateGame(2);
+			}else if(key=='d'){
+				updateGame(3);
+			}
+		
+	}
 
 	private void updateGame(int i){
 		switch(i){
@@ -252,5 +306,6 @@ public class Interface {
 		else{
 			lblcurretnState.setText("Pode Jogar!");
 		}
+
 	}
 }
