@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import maze.logic.Drake;
 import maze.logic.Game;
+import maze.logic.MazeBuilder;
 import maze.logic.Game.GameStatus;
 import maze.logic.Sword;
 
@@ -78,6 +79,15 @@ public class TestMazeWithRandomDragon {
 			{'X', ' ', 'X', 'D', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
 			};
+	
+	@Test(timeout=1000)
+	public void testRandomMaze(){
+		MazeBuilder mb = new MazeBuilder(11, 1, 1);
+		char[][] mt = mb.maze;
+		Game g = new Game(3, 1, 1, 1, mt);
+		assertEquals(11, mt.length);
+	}
+	
 	
 	@Test(timeout=1000)
 	public void triesToExitWithoutKillingDragon(){
