@@ -15,6 +15,11 @@ import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.Dimension;
+import net.miginfocom.swing.MigLayout;
+import java.awt.ComponentOrientation;
+import javax.swing.JPanel;
+import java.awt.Frame;
 
 public class Interface {
 
@@ -22,6 +27,13 @@ public class Interface {
 	private JTextField fldSize;
 	private JTextField fldDrakes;
 	private Game g;
+	private JTextArea printMaze;
+	private JLabel lblcurretnState;
+	private JButton btnUp;
+	private JButton btnDown;
+	private JButton btnLeft;
+	private JButton btnRight;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -51,83 +63,120 @@ public class Interface {
 	 */
 	private void initialize() {
 		frmMaze = new JFrame();
-		frmMaze.setResizable(false);
+		frmMaze.setExtendedState(Frame.MAXIMIZED_HORIZ);
+		frmMaze.getContentPane().setPreferredSize(new Dimension(2147483647, 2147483647));
+		frmMaze.getContentPane().setMinimumSize(new Dimension(50, 50));
+		frmMaze.setMinimumSize(new Dimension(500, 400));
 		frmMaze.setTitle("Maze");
-		frmMaze.setBounds(100, 100, 852, 556);
+		frmMaze.setBounds(100, 100, 801, 522);
 		frmMaze.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmMaze.getContentPane().setLayout(null);
+		frmMaze.getContentPane().setLayout(new MigLayout("", "[138px][12px][383px][97px][][29px][][][97px]", "[25px][22px][28px][82px][13px][25px][][12px][211px][16px]"));
 		
 		fldSize = new JTextField();
-		fldSize.setBounds(162, 26, 52, 22);
-		frmMaze.getContentPane().add(fldSize);
+		fldSize.setPreferredSize(new Dimension(2147483647, 2147483647));
+		frmMaze.getContentPane().add(fldSize, "cell 2 0,alignx left,aligny center");
 		fldSize.setColumns(10);
 		fldSize.setText("11"); //default value
 		
 		JLabel mazeSize = new JLabel("Maze Size");
-		mazeSize.setBounds(12, 29, 138, 16);
-		frmMaze.getContentPane().add(mazeSize);
+		mazeSize.setPreferredSize(new Dimension(290, 80));
+		mazeSize.setMaximumSize(new Dimension(290, 80));
+		frmMaze.getContentPane().add(mazeSize, "cell 0 0,growx,aligny center");
 	
 		
 		JLabel drakesNumber = new JLabel("Number of Dragons");
-		drakesNumber.setBounds(12, 58, 138, 16);
-		frmMaze.getContentPane().add(drakesNumber);
+		drakesNumber.setPreferredSize(new Dimension(555, 80));
+		drakesNumber.setMaximumSize(new Dimension(555, 80));
+		frmMaze.getContentPane().add(drakesNumber, "cell 0 1,growx,aligny center");
 		
 		fldDrakes = new JTextField();
-		fldDrakes.setBounds(162, 55, 52, 22);
-		frmMaze.getContentPane().add(fldDrakes);
+		fldDrakes.setPreferredSize(new Dimension(2147483647, 2147483647));
+		frmMaze.getContentPane().add(fldDrakes, "cell 2 1,alignx left,aligny top");
 		fldDrakes.setColumns(10);
 		fldDrakes.setText("1"); //default value
 		
 		JLabel dragonMode = new JLabel("Dragon Mode");
-		dragonMode.setBounds(12, 87, 103, 16);
-		frmMaze.getContentPane().add(dragonMode);
+		dragonMode.setPreferredSize(new Dimension(380, 80));
+		dragonMode.setMaximumSize(new Dimension(380, 80));
+		frmMaze.getContentPane().add(dragonMode, "cell 0 2,alignx left,aligny center");
 		
 		JComboBox<String> gameMode = new JComboBox<String>();
-		gameMode.setBounds(162, 84, 117, 22);
-		frmMaze.getContentPane().add(gameMode);
+		frmMaze.getContentPane().add(gameMode, "cell 2 2,alignx left,aligny bottom");
 		gameMode.addItem("Static Dragon");
 		gameMode.addItem("Moving Dragon");
 		gameMode.addItem("Moving and Sleeping");
-		//gameMode.setSelectedIndex(0); //default value
+		gameMode.setSelectedIndex(0); //default value
 		
 
 		
 		JButton btnExit = new JButton("Exit");
+		btnExit.setMinimumSize(new Dimension(40, 25));
+		btnExit.setPreferredSize(new Dimension(2147483647, 2147483647));
+		btnExit.setMaximumSize(new Dimension(455, 125));
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(645, 78, 97, 25);
-		frmMaze.getContentPane().add(btnExit);
+		frmMaze.getContentPane().add(btnExit, "cell 3 2 6 1,alignx center,aligny top");
 		
-		JTextArea printMaze = new JTextArea();
+		printMaze = new JTextArea();
+		printMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		printMaze.setFont(new Font("Courier New", Font.PLAIN, 20));
 		printMaze.setEditable(false);
-		printMaze.setBounds(12, 134, 533, 343);
-		frmMaze.getContentPane().add(printMaze);
+		frmMaze.getContentPane().add(printMaze, "cell 0 3 3 6,grow");
 		
-		JButton btnUp = new JButton("Up");
-		btnUp.setBounds(645, 191, 97, 25);
-		frmMaze.getContentPane().add(btnUp);
+		panel = new JPanel();
+		panel.setPreferredSize(new Dimension(0, 100));
+		panel.setMinimumSize(new Dimension(0, 100));
+		frmMaze.getContentPane().add(panel, "flowx,cell 5 3");
 		
-		JButton btnLeft = new JButton("Left");
-		btnLeft.setBounds(581, 229, 97, 25);
-		frmMaze.getContentPane().add(btnLeft);
+		btnUp = new JButton("Up");
+		btnUp.setMinimumSize(new Dimension(65, 25));
+		btnUp.setPreferredSize(new Dimension(65, 25));
+		btnUp.setMaximumSize(new Dimension(225, 125));
+		frmMaze.getContentPane().add(btnUp, "cell 6 5,alignx center,aligny bottom");
 		
-		JButton btnRight = new JButton("Right");
-		btnRight.setBounds(707, 229, 97, 25);
-		frmMaze.getContentPane().add(btnRight);
 		
-		JButton btnDown = new JButton("Down");
-		btnDown.setBounds(645, 266, 97, 25);
-		frmMaze.getContentPane().add(btnDown);
+		btnUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateGame(0);
+			}
+		});
 		
-		JLabel lblcurretnState = new JLabel("Create new maze!");
-		lblcurretnState.setBounds(12, 492, 533, 16);
-		frmMaze.getContentPane().add(lblcurretnState);
+		btnLeft = new JButton("Left");
+		btnLeft.setMaximumSize(new Dimension(265, 125));
+		frmMaze.getContentPane().add(btnLeft, "cell 4 6 2 1,growx,aligny top");
+		
+		btnLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateGame(2);
+			}
+		});
+		
+		btnRight = new JButton("Right");
+		btnRight.setMaximumSize(new Dimension(305, 125));
+		frmMaze.getContentPane().add(btnRight, "cell 7 6 2 1,growx,aligny top");
+		
+		btnRight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateGame(3);
+			}
+		});
+		
+		btnDown = new JButton("Down");
+		btnDown.setMaximumSize(new Dimension(325, 125));
+		frmMaze.getContentPane().add(btnDown, "cell 3 8 6 1,alignx center,aligny top");
+		
+		lblcurretnState = new JLabel("Create new maze!");
+		lblcurretnState.setPreferredSize(new Dimension(525, 80));
+		lblcurretnState.setMaximumSize(new Dimension(525, 80));
+		frmMaze.getContentPane().add(lblcurretnState, "cell 0 9 9 1,growx,aligny top");
 		
 		JButton newMaze = new JButton("New Maze");
+		newMaze.setMinimumSize(new Dimension(40, 25));
+		newMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
+		newMaze.setMaximumSize(new Dimension(455, 125));
 		newMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -143,37 +192,48 @@ public class Interface {
 				
 			}
 		});
-		newMaze.setBounds(645, 25, 97, 25);
-		frmMaze.getContentPane().add(newMaze);
-		
-		
-		btnUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.moveHeroUp();	
-				printMaze.setText(g.toString());
-			}
-		});
+		frmMaze.getContentPane().add(newMaze, "cell 3 0 6 1,alignx center,aligny top");
 		
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				g.moveHeroDown();
-				printMaze.setText(g.toString());
-			}
-		});
-		
-		btnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.moveHeroLeft();
-				printMaze.setText(g.toString());
-			}
-		});
-		
-		btnRight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				g.moveHeroRight();
-				printMaze.setText(g.toString());
+				updateGame(1);
 			}
 		});
 	
+	}
+	
+	private void updateGame(int i){
+		switch(i){
+		case 0:
+			g.moveHeroUp();	
+			break;
+		case 1:
+			g.moveHeroDown();
+			break;
+		case 2:
+			g.moveHeroLeft();
+			break;
+		case 3:
+			g.moveHeroRight();
+			break;
+		}
+		printMaze.setText(g.toString());
+		if(g.gameLost){
+			lblcurretnState.setText("You Lost! Try again.");
+			btnLeft.setEnabled(false);
+			btnRight.setEnabled(false);
+			btnUp.setEnabled(false);
+			btnDown.setEnabled(false);
+		}
+		else if(g.gameWon){
+			lblcurretnState.setText("You Won, Congrats!");
+			btnLeft.setEnabled(false);
+			btnRight.setEnabled(false);
+			btnUp.setEnabled(false);
+			btnDown.setEnabled(false);
+		}
+		else{
+			lblcurretnState.setText("Pode Jogar!");
+		}
 	}
 }
