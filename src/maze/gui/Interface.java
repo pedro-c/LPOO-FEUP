@@ -66,7 +66,6 @@ public class Interface {
 	 */
 	private void initialize() {
 		frmMaze = new JFrame();
-		frmMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().setMinimumSize(new Dimension(50, 50));
 		frmMaze.setMinimumSize(new Dimension(500, 400));
