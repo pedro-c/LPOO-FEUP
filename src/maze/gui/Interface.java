@@ -20,6 +20,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.DropMode;
+import java.awt.Dialog.ModalExclusionType;
 
 public class Interface {
 
@@ -64,19 +66,21 @@ public class Interface {
 	 */
 	private void initialize() {
 		frmMaze = new JFrame();
+		frmMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().setMinimumSize(new Dimension(50, 50));
 		frmMaze.setMinimumSize(new Dimension(500, 400));
 		frmMaze.setTitle("Maze");
 		frmMaze.setBounds(100, 100, 801, 522);
 		frmMaze.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmMaze.getContentPane().setLayout(new MigLayout("", "[138px][12px][383px][97px][][29px][][][97px]", "[25px][22px][28px][82px][13px][25px][][12px][211px][16px]"));
+		frmMaze.getContentPane().setLayout(new MigLayout("", "[138px][12px][383px][97px][][29px][][][][][][][][][][][][][97px]", "[25px][22px][28px][82px][13px][25px][][12px][211px][16px]"));
 		
 		fldSize = new JTextField();
 		fldSize.setPreferredSize(new Dimension(2147483647, 2147483647));
 		frmMaze.getContentPane().add(fldSize, "cell 2 0,alignx left,aligny center");
 		fldSize.setColumns(10);
 		fldSize.setText("11"); //default value
+
 
 		
 		JLabel mazeSize = new JLabel("Maze Size");
@@ -120,9 +124,10 @@ public class Interface {
 				System.exit(0);
 			}
 		});
-		frmMaze.getContentPane().add(btnExit, "cell 3 2 6 1,alignx center,aligny top");
+		frmMaze.getContentPane().add(btnExit, "cell 8 2 8 1,alignx center,aligny top");
 		
 		printMaze = new JTextArea();
+		printMaze.setEditable(false);
 		printMaze.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -142,8 +147,7 @@ public class Interface {
 		
 		printMaze.setPreferredSize(new Dimension(2147483647, 2147483647));
 		printMaze.setFont(new Font("Courier New", Font.PLAIN, 20));
-		printMaze.setEditable(false);
-		frmMaze.getContentPane().add(printMaze, "cell 0 3 3 6,grow");
+		frmMaze.getContentPane().add(printMaze, "cell 0 3 4 6,grow");
 		
 		panel = new JPanel();
 		panel.setPreferredSize(new Dimension(0, 100));
@@ -160,7 +164,7 @@ public class Interface {
 		btnUp.setMinimumSize(new Dimension(65, 25));
 		btnUp.setPreferredSize(new Dimension(65, 25));
 		btnUp.setMaximumSize(new Dimension(225, 125));
-		frmMaze.getContentPane().add(btnUp, "cell 6 5,alignx center,aligny bottom");
+		frmMaze.getContentPane().add(btnUp, "cell 12 5,alignx center,aligny bottom");
 		
 		
 		btnUp.addActionListener(new ActionListener() {
@@ -169,7 +173,17 @@ public class Interface {
 			}
 		});
 		
+		btnRight = new JButton("Right");
+		btnRight.setPreferredSize(new Dimension(53, 25));
+		btnRight.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
+		
 		btnLeft = new JButton("Left");
+		btnLeft.setMinimumSize(new Dimension(61, 25));
 		btnLeft.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -177,23 +191,15 @@ public class Interface {
 			}
 		});
 		btnLeft.setMaximumSize(new Dimension(265, 125));
-		frmMaze.getContentPane().add(btnLeft, "cell 4 6 2 1,growx,aligny top");
+		frmMaze.getContentPane().add(btnLeft, "cell 8 6,growx,aligny top");
 		
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateGame(2);
 			}
 		});
-		
-		btnRight = new JButton("Right");
-		btnRight.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				keyMovement(e);
-			}
-		});
 		btnRight.setMaximumSize(new Dimension(305, 125));
-		frmMaze.getContentPane().add(btnRight, "cell 7 6 2 1,growx,aligny top");
+		frmMaze.getContentPane().add(btnRight, "cell 15 6,growx,aligny top");
 		
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -209,12 +215,18 @@ public class Interface {
 			}
 		});
 		btnDown.setMaximumSize(new Dimension(325, 125));
-		frmMaze.getContentPane().add(btnDown, "cell 3 8 6 1,alignx center,aligny top");
+		frmMaze.getContentPane().add(btnDown, "cell 12 8,alignx center,aligny top");
+		
+		btnDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateGame(1);
+			}
+		});
 		
 		lblcurretnState = new JLabel("Create new maze!");
 		lblcurretnState.setPreferredSize(new Dimension(525, 80));
 		lblcurretnState.setMaximumSize(new Dimension(525, 80));
-		frmMaze.getContentPane().add(lblcurretnState, "cell 0 9 9 1,growx,aligny top");
+		frmMaze.getContentPane().add(lblcurretnState, "cell 0 9 19 1,growx,aligny top");
 		
 		newMaze = new JButton("New Maze");
 		newMaze.setMinimumSize(new Dimension(40, 25));
@@ -229,12 +241,20 @@ public class Interface {
 				btnUp.setEnabled(true);
 				btnDown.setEnabled(true);
 				
-				if(Integer.parseInt(fldSize.getText()) < 5){
-					lblcurretnState.setText("Maze is too small!");
-				}else if(Integer.parseInt(fldSize.getText()) > 39)
+				
+				if (!fldSize.getText().matches("[0-9]+"))
 				{
-					lblcurretnState.setText("Maze is too Big!");	
-				}else{
+					lblcurretnState.setText("Invalid maze size!");	
+				}else if(!fldDrakes.getText().matches("[0-9]+"))
+				{
+					lblcurretnState.setText("Invalid number of dragons!");
+					
+				}else if(Integer.parseInt(fldSize.getText()) < 5){
+					lblcurretnState.setText("Maze is too small!");
+				}else if(Integer.parseInt(fldSize.getText()) > 40){
+					lblcurretnState.setText("Maze is too big!");
+				}
+				else{
 					int x=Integer.parseInt(fldSize.getText());
 					if((x % 2) == 0){
 						x++;
@@ -248,13 +268,7 @@ public class Interface {
 				
 			}
 		});
-		frmMaze.getContentPane().add(newMaze, "cell 3 0 6 1,alignx center,aligny top");
-		
-		btnDown.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateGame(1);
-			}
-		});
+		frmMaze.getContentPane().add(newMaze, "cell 8 0 8 1,alignx center,aligny top");
 	
 	}
 	
