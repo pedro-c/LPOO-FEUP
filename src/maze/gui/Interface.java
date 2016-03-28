@@ -287,20 +287,25 @@ public class Interface {
 	}
 
 	private void updateGame(int i){
-		switch(i){
-		case 0:
-			g.moveHeroUp();	
-			break;
-		case 1:
-			g.moveHeroDown();
-			break;
-		case 2:
-			g.moveHeroLeft();
-			break;
-		case 3:
-			g.moveHeroRight();
-			break;
+		if(!g.gameLost && !g.gameWon){
+			switch(i){
+			case 0:
+				g.moveHeroUp();	
+				break;
+			case 1:
+				g.moveHeroDown();
+				break;
+			case 2:
+				g.moveHeroLeft();
+				break;
+			case 3:
+				g.moveHeroRight();
+				break;
+			default:
+				break;
+			}
 		}
+		
 		printMaze.setText(g.toString());
 		if(g.gameLost){
 			lblcurretnState.setText("You Lost! Try again.");
