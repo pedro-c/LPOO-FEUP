@@ -16,7 +16,7 @@ public class MazeGraphics extends JPanel  {
 
 		
 	// Coordinates of the bounding rectangle for drawing the example image in the screen.
-	private int x = 0, y = 0, width = 50, height=50;
+	private int width = 50, height=50;
 
 	// in-memory representation of an example image to be displayed in the screen
 	private BufferedImage hero;
@@ -100,7 +100,7 @@ public class MazeGraphics extends JPanel  {
 			for (int j = 0; j < maze.length; j++) {
 				int x=i*35;
 				int y=j*35;
-				switch(maze[i][j]){
+				switch(maze[j][i]){
 				case 'X':
 					g.drawImage(wall, x, y, null);
 					break;

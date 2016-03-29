@@ -91,6 +91,7 @@ public class Interface {
 		graphicsPanel = new MazeGraphics();
 		graphicsPanel.setBounds(313, 13, 441, 434);
 		frmMaze.getContentPane().add(graphicsPanel);
+
 		
 		
 		
@@ -99,12 +100,13 @@ public class Interface {
 		drakesNumber.setPreferredSize(new Dimension(555, 80));
 		drakesNumber.setMaximumSize(new Dimension(555, 80));
 		frmMaze.getContentPane().add(drakesNumber);
+
 		
 		printMaze = new JTextArea();
 		printMaze.setVisible(false);
 		printMaze.setBounds(316, 10, 438, 437);
 		printMaze.setEditable(false);
-		printMaze.addKeyListener(new KeyAdapter() {
+		/*printMaze.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char key;
@@ -119,7 +121,7 @@ public class Interface {
 					updateGame(3);
 				}
 			}
-		});
+		});*/
 		
 		fldDrakes = new JTextField();
 		fldDrakes.setBounds(153, 39, 137, 22);
@@ -233,9 +235,9 @@ public class Interface {
 					
 					printMaze.setBounds(302, 10, g.Maze.length*24, g.Maze.length*24);
 					if(printMaze.getHeight()<=500){
-						frmMaze.setBounds(100, 100, 350+printMaze.getWidth(), 500);
+						frmMaze.setBounds(100, 100, 350+graphicsPanel.getWidth(), 500);
 					}else{
-						frmMaze.setBounds(100, 100, 350+printMaze.getWidth(), printMaze.getHeight()+80);
+						frmMaze.setBounds(100, 100, 350+graphicsPanel.getWidth(), graphicsPanel.getHeight()+80);
 					}
 					
 					lblcurretnState.setText("Pode jogar!");
@@ -250,6 +252,12 @@ public class Interface {
 					
 				}
 				
+			}
+		});
+		newMaze.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
 			}
 		});
 		
