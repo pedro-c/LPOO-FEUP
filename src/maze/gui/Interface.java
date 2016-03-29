@@ -232,7 +232,7 @@ public class Interface {
 					g = new Game(gameMode.getSelectedIndex()+1, Integer.parseInt(fldDrakes.getText()), 1, 1, mt);
 					graphicsPanel.setMaze(g);
 					printMaze.setText(g.toString());
-					
+					graphicsPanel.setBounds(313, 13, g.Maze.length*35, g.Maze.length*35);
 					printMaze.setBounds(302, 10, g.Maze.length*24, g.Maze.length*24);
 					if(printMaze.getHeight()<=500){
 						frmMaze.setBounds(100, 100, 350+graphicsPanel.getWidth(), 500);
