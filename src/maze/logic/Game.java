@@ -7,7 +7,7 @@ public class Game {
 	public enum GameStatus {
 		HeroUnarmed, HeroArmed, HeroDied;
 	}
-	
+
 	public boolean gameLost = false;
 	public boolean gameWon = false;
 	private GameStatus status;
@@ -29,37 +29,37 @@ public class Game {
 		this.nExits = nExits;
 		this.nSwords = nSwords;
 		status = GameStatus.HeroUnarmed;
-		
+
 		Maze = maze;		
-		
+
 		//searches and updates hero's coordinates according to the given maze
 		outerLoop:
-		for(int i = 0; i < Maze.length; i++)
-			for(int j = 0; j < Maze[i].length; j++)
-				if(Maze[i][j] == 'H')	{
-					hero.line = i;
-					hero.col = j;
-					break outerLoop;
-				}
-		
+			for(int i = 0; i < Maze.length; i++)
+				for(int j = 0; j < Maze[i].length; j++)
+					if(Maze[i][j] == 'H')	{
+						hero.line = i;
+						hero.col = j;
+						break outerLoop;
+					}
+
 		//searches all swords and adds them to the array
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
 				if(Maze[i][j] == 'E')	{
 					Sword s1 = new Sword(i,j);
 					Swords.add(s1);
-					
+
 				}
-		
+
 		//searches all dragons and adds them to the array
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
 				if(Maze[i][j] == 'D')	{
 					Drake d1 = new Drake(i,j);
 					Drakes.add(d1);
-					
+
 				}
-		
+
 		// searches all Exits and adds them to the array
 		for (int i = 0; i < Maze.length; i++)
 			for (int j = 0; j < Maze[i].length; j++)
@@ -68,7 +68,7 @@ public class Game {
 					Exits.add(e1);
 
 				}
-		
+
 	}
 	/*
 	public Game(int mode, int nDrakes, int nExits, int nSwords)
@@ -78,11 +78,11 @@ public class Game {
 		this.nExits = nExits;
 		this.nSwords = nSwords;
 		status = GameStatus.HeroUnarmed;
-		
+
 		createMaze();		
 	}
-	*/
-	
+	 */
+
 	@Override
 	public String toString()
 	{
@@ -97,31 +97,31 @@ public class Game {
 		return s;
 	}
 
-	
+
 	public Point getHeroPosition()
 	{
 		Point p = new Point(hero.line, hero.col);
 		return p;
 	}
-	
+
 	public ArrayList<Point> getDrakesPositions(){
-		
+
 		ArrayList<Point> Positions = new ArrayList<Point>(nDrakes);
-		
+
 		for(int i=0; i<nDrakes; i++){
 			Point p = new Point(Drakes.get(i).line,Drakes.get(i).col);
 			Positions.add(p);
 		}
-				
+
 		return Positions;
 	}
-	
+
 	public GameStatus getStatus() {
 		return status;
 	}
-	
+
 	public boolean getDrakeStatus(int line, int col){
-		
+
 		boolean ret = false;
 		for(int i = 0; i < Drakes.size(); i++){
 			if(Drakes.get(i).line == line && Drakes.get(i).col == col)
@@ -129,7 +129,7 @@ public class Game {
 		}
 		return ret;	
 	}
-	
+
 	/*
 	public void drawMaze() {
 		for (int line = 0; line < height; line++) {
@@ -141,8 +141,8 @@ public class Game {
 		}
 	}
 	 */
-	
-/*
+
+	/*
 	public void createMaze() {
 
 		// Temporario ate criarmos o labirinto de forma aleatoria
@@ -150,12 +150,12 @@ public class Game {
 		Drake d1 = new Drake(3, 1);
 		Exit e1 = new Exit(5, 9);
 		Sword s1 = new Sword(4, 1);
-		
+
 		// Colocar Herói
 		Maze[hero.line][hero.col] = hero.symbol;
 		hero.line=1;
 		hero.col=1;
-		
+
 		Exits.add(e1);
 		Drakes.add(d1);
 		Swords.add(s1);
@@ -223,7 +223,7 @@ public class Game {
 
 
 	}
-	*/
+	 */
 	public boolean checkExit(int line, int col) {
 		boolean ret = false;
 
@@ -244,197 +244,59 @@ public class Game {
 		}
 	}
 
+	public boolean moveHero(int newLine, int newCol)
+	{		
+		int curLine = hero.line, curCol = hero.col;
+
+
+
+		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
+			gameWon = true;
+		} 			
+		else if (Maze[newLine][newCol] == ' ') {
+			hero.line = newLine;
+			hero.col = newCol;
+		} 
+		else if (Maze[newLine][newCol] == 'E') {
+			hero.symbol = 'A';
+			hero.line = newLine;
+			hero.col = newCol;
+			status = GameStatus.HeroArmed;
+			updateSword(newCol, newLine, false);
+		} 
+		else{
+			return false; //Invalid Movement
+		}
+
+		//clears the hero previous position
+		Maze[curLine][curCol] = ' ';
+
+		updateMaze();
+		return true; //Hero moved successfully
+
+	}
+
 	public boolean moveHeroUp() {
 
-		int newLine = hero.line;
-		int newCol = hero.col;
-		
-		//clears the hero previous position
-		Maze[newLine][newCol] = ' ';
-		
-		newLine-=1;
-
-		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
-			gameWon = true;
-			return true;
-		} 			
-		else if (Maze[newLine][newCol] == ' ') {
-			hero.line = newLine;
-			hero.col = newCol;
-		} 
-		else if (Maze[newLine][newCol] == 'E') {
-			hero.symbol = 'A';
-			hero.line = newLine;
-			hero.col = newCol;
-			status = GameStatus.HeroArmed;
-			updateSword(newCol, newLine, false);
-		} 
-		else{
-			Maze[hero.line][hero.col] = 'H';
-			return false; //Invalid Movement
-		}
-			
-		updateMaze();
-		return true; //Hero moved successfully
-
+		return moveHero(hero.line - 1, hero.col);
 	}
-	
+
 	public boolean moveHeroDown() {
 
-		int newLine = hero.line;
-		int newCol = hero.col;
-		
-		//clears the hero previous position
-		Maze[newLine][newCol] = ' ';
-		
-		newLine+=1;
-
-		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
-			gameWon = true;
-			return true;
-		} 			
-		else if (Maze[newLine][newCol] == ' ') {
-			hero.line = newLine;
-			hero.col = newCol;
-		} 
-		else if (Maze[newLine][newCol] == 'E') {
-			hero.symbol = 'A';
-			hero.line = newLine;
-			hero.col = newCol;
-			status = GameStatus.HeroArmed;
-			updateSword(newCol, newLine, false);
-		} 
-		else{
-			Maze[hero.line][hero.col] = 'H';
-			return false; //Invalid Movement
-		}
-			
-		updateMaze();
-		return true; //Hero moved successfully
-
+		return moveHero(hero.line + 1, hero.col);
 	}
-	
+
 	public boolean moveHeroRight() {
 
-		int newLine = hero.line;
-		int newCol = hero.col;
-		
-		//clears the hero previous position
-		Maze[newLine][newCol] = ' ';
-		
-		newCol+=1;
-
-		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
-			gameWon = true;
-			return true;
-		} 			
-		else if (Maze[newLine][newCol] == ' ') {
-			hero.line = newLine;
-			hero.col = newCol;
-		} 
-		else if (Maze[newLine][newCol] == 'E') {
-			hero.symbol = 'A';
-			hero.line = newLine;
-			hero.col = newCol;
-			status = GameStatus.HeroArmed;
-			updateSword(newCol, newLine, false);
-		} 
-		else{
-			Maze[hero.line][hero.col] = 'H';
-			return false; //Invalid Movement
-		}
-			
-		updateMaze();
-		return true; //Hero moved successfully
-
+		return moveHero(hero.line, hero.col + 1);
 	}
-	
+
 	public boolean moveHeroLeft() {
 
-		int newLine = hero.line;
-		int newCol = hero.col;
-		
-		//clears the hero previous position
-		Maze[newLine][newCol] = ' ';
-		
-		newCol-=1;
-
-		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
-			gameWon = true;
-			return true;
-		} 			
-		else if (Maze[newLine][newCol] == ' ') {
-			hero.line = newLine;
-			hero.col = newCol;
-		} 
-		else if (Maze[newLine][newCol] == 'E') {
-			hero.symbol = 'A';
-			hero.line = newLine;
-			hero.col = newCol;
-			status = GameStatus.HeroArmed;
-			updateSword(newCol, newLine, false);
-		} 
-		else{
-			Maze[hero.line][hero.col] = 'H';
-			return false; //Invalid Movement
-		}
-			
-		updateMaze();
-		return true; //Hero moved successfully
-
-	}
-	
-	/*
-	public boolean updateHero(char movement) {
-
-		int newLine = hero.line;
-		int newCol = hero.col;
-		
-		//clears the hero previous position
-		Maze[newLine][newCol] = ' ';
-
-		switch (movement) {
-		case 'a':
-			newCol -= 1;
-			break;
-		case 'd':
-			newCol += 1;
-			break;
-		case 's':
-			newLine +=1;
-			break;
-		case 'w':
-			newLine -=1;
-			break;
-		}
-
-		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
-			gameWon = true;
-			return true;
-		} 			
-		else if (Maze[newLine][newCol] == ' ') {
-			hero.line = newLine;
-			hero.col = newCol;
-		} 
-		else if (Maze[newLine][newCol] == 'E') {
-			hero.symbol = 'A';
-			hero.line = newLine;
-			hero.col = newCol;
-			status = GameStatus.HeroArmed;
-			updateSword(newCol, newLine, false);
-		} 
-		else{
-			Maze[hero.line][hero.col] = 'H';
-			return false; //Invalid Movement
-		}
-			
-		updateMaze();
-		return true; //Hero moved successfully
-
+		return moveHero(hero.line, hero.col - 1);
 	}
 
-*/
-	
+
 	public void killDrake(int line, int col) {
 
 		if(hero.symbol != 'A' && Maze[line][col] == 'D')
@@ -443,7 +305,7 @@ public class Game {
 			status = GameStatus.HeroDied;
 			return; //No need to do anything else, the game is lost
 		}
-		
+
 		if(hero.symbol != 'A' && Maze[line][col] == 'd')
 		{
 			return; //Does nothing
@@ -462,9 +324,9 @@ public class Game {
 			}
 
 	}
-	
+
 	public boolean checksAllDrakes(){
-	
+
 		for (int i = 0; i < nDrakes; i++) {
 			if(Drakes.get(i).dead==false){
 				return false;
@@ -576,8 +438,8 @@ public class Game {
 		Maze[hero.line][hero.col] = hero.symbol;
 		return;
 	}
-*/	
-	
+	 */	
+
 	public void updateMaze() {
 
 
