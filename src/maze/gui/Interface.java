@@ -16,12 +16,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Dimension;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.DropMode;
-import java.awt.Dialog.ModalExclusionType;
 
 public class Interface {
 
@@ -37,6 +34,7 @@ public class Interface {
 	private JButton btnRight;
 	private JPanel panel;
 	private JButton newMaze;
+	private MazeGraphics graphicsPanel;
 
 	/**
 	 * Launch the application.
@@ -73,15 +71,15 @@ public class Interface {
 		frmMaze.setTitle("Maze");
 		frmMaze.setBounds(100, 100, 801, 522);
 		frmMaze.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frmMaze.getContentPane().setLayout(null);
+		frmMaze.getContentPane().setLayout(null);
 		
 		
 				
-				JLabel mazeSize = new JLabel("Maze Size");
-				mazeSize.setBounds(7, 13, 111, 22);
-				mazeSize.setPreferredSize(new Dimension(290, 80));
-				mazeSize.setMaximumSize(new Dimension(290, 80));
-				frmMaze.getContentPane().add(mazeSize);
+		JLabel mazeSize = new JLabel("Maze Size");
+		mazeSize.setBounds(7, 13, 111, 22);
+		mazeSize.setPreferredSize(new Dimension(290, 80));
+		mazeSize.setMaximumSize(new Dimension(290, 80));
+		frmMaze.getContentPane().add(mazeSize);
 		
 		fldSize = new JTextField();
 		fldSize.setBounds(153, 13, 137, 22);
@@ -90,7 +88,11 @@ public class Interface {
 		fldSize.setColumns(10);
 		fldSize.setText("11"); //default value
 		
-	
+		graphicsPanel = new MazeGraphics();
+		graphicsPanel.setBounds(313, 13, 441, 434);
+		frmMaze.getContentPane().add(graphicsPanel);
+		
+		
 		
 		JLabel drakesNumber = new JLabel("Number of Dragons");
 		drakesNumber.setBounds(7, 39, 111, 22);
@@ -99,7 +101,8 @@ public class Interface {
 		frmMaze.getContentPane().add(drakesNumber);
 		
 		printMaze = new JTextArea();
-		printMaze.setBounds(302, 10, 437, 437);
+		printMaze.setVisible(false);
+		printMaze.setBounds(316, 10, 438, 437);
 		printMaze.setEditable(false);
 		printMaze.addKeyListener(new KeyAdapter() {
 			@Override
@@ -225,6 +228,7 @@ public class Interface {
 					MazeBuilder mb = new MazeBuilder(x, Integer.parseInt(fldDrakes.getText()), 1);
 					char[][] mt = mb.maze;
 					g = new Game(gameMode.getSelectedIndex()+1, Integer.parseInt(fldDrakes.getText()), 1, 1, mt);
+					graphicsPanel.setMaze(g);
 					printMaze.setText(g.toString());
 					
 					printMaze.setBounds(302, 10, g.Maze.length*24, g.Maze.length*24);
@@ -240,6 +244,10 @@ public class Interface {
 					btnRight.setEnabled(true);
 					btnUp.setEnabled(true);
 					btnDown.setEnabled(true);
+					
+					
+					graphicsPanel.repaint();
+					
 				}
 				
 			}
@@ -303,6 +311,7 @@ public class Interface {
 		lblcurretnState.setPreferredSize(new Dimension(525, 80));
 		lblcurretnState.setMaximumSize(new Dimension(525, 80));
 		frmMaze.getContentPane().add(lblcurretnState);
+
 	
 	}
 	
@@ -359,6 +368,7 @@ public class Interface {
 		else{
 			lblcurretnState.setText("Pode Jogar!");
 		}
-
+		graphicsPanel.setMaze(g);
+		graphicsPanel.repaint();
 	}
 }
