@@ -12,6 +12,7 @@ Java guided project.
 - 3 dragon modes (static, moving, moving and sleeping);
 - Ability to play with keyboard and by clicking the buttons;
 - Verify if there's a clear path from the hero to the sword (using backtracking);
+
 # To be developed
 - Verify if all dragons fit in the maze;
 
