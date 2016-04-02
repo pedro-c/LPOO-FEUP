@@ -258,7 +258,7 @@ public class Interface {
 				btnRight.setVisible(true);
 				btnUp.setVisible(true);
 				btnDown.setVisible(true);
-
+				btnExitToMenu.setVisible(true);
 				graphicsPanel.requestFocus();
 				graphicsPanel.repaint();
 
@@ -475,7 +475,7 @@ public class Interface {
 		graphicsPanel.setVisible(true);
 		gameMode.setVisible(flag);
 		gameMode.setEnabled(flag);
-		btnExitToMenu.setVisible(!flag);
+		btnExitToMenu.setVisible(flag);
 		if (flag) {
 			frmMaze.setBounds(500, 200, 500, 322);
 			graphicsPanel.setBounds(305, 0, graphicsPanel.getWidth(), graphicsPanel.getHeight());
