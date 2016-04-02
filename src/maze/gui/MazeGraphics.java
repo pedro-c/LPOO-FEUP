@@ -1,4 +1,3 @@
-
 package maze.gui;
 
 import java.awt.image.BufferedImage;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import maze.logic.*;
+
 
 
 @SuppressWarnings("serial")
@@ -27,6 +27,13 @@ public class MazeGraphics extends JPanel  {
 	private BufferedImage wall;
 	private BufferedImage floor;
 	private BufferedImage armed;
+	private BufferedImage menuImage;
+	private BufferedImage won;
+	private BufferedImage lost;
+	public boolean gameLost = false;
+	public boolean gameWon = false;
+	private boolean menuFlag=true;
+
 	public char[][] maze = new char[width][height];
 	
 
@@ -81,55 +88,88 @@ public class MazeGraphics extends JPanel  {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			menuImage =  ImageIO.read(new File("res/supermario.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			won =  ImageIO.read(new File("res/won.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			lost =  ImageIO.read(new File("res/lost.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 
 	}
 			
 	public void setMaze(Game g){
 		this.maze=g.Maze;
+		this.gameLost=g.gameLost;
+		this.gameWon=g.gameWon;
+
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g); // clears the background ...		
-		drawMaze(g);
+	public void printMenu(){
+		this.menuFlag=true;
+	}
+	
+	public void paintComponent(Graphics gr) {
+		super.paintComponent(gr); // clears the background ...		
+		drawMaze(gr);
 	}
 
 	
-	public void drawMaze(Graphics g){
-
-		for (int i = 0; i < maze.length ; i++) {
-			for (int j = 0; j < maze.length; j++) {
-				int x=i*35;
-				int y=j*35;
-				switch(maze[j][i]){
-				case 'X':
-					g.drawImage(wall, x, y, null);
-					break;
-				case 'H':
-					g.drawImage(hero, x, y, null);
-					break;
-				case 'E':
-					g.drawImage(sword, x, y, null);
-					break;
-				case 'D':
-					g.drawImage(drakeA, x, y, null);
-					break;
-				case 'd':
-					g.drawImage(drakeS, x, y, null);
-					break;
-				case 'S':
-					g.drawImage(exit, x, y, null);
-					break;
-				case 'A':
-					g.drawImage(armed, x, y, null);
-					break;
-				case ' ':
-					g.drawImage(floor, x, y, null);
-					break;
-				default:
-					break;
+	public void drawMaze(Graphics gr){
+	
+		if(menuFlag){
+			gr.drawImage(menuImage, 0, 0, null);
+			menuFlag=false;
+		}else if(gameWon){
+			gr.drawImage(won, 0, 0, null);
+		}else if(gameLost){
+			gr.drawImage(lost, 0, 0, null);
+		}else{
+			for (int i = 0; i < maze.length ; i++) {
+				for (int j = 0; j < maze.length; j++) {
+					int x=i*35;
+					int y=j*35;
+					switch(maze[j][i]){
+					case 'X':
+						gr.drawImage(wall, x, y, null);
+						break;
+					case 'H':
+						gr.drawImage(hero, x, y, null);
+						break;
+					case 'E':
+						gr.drawImage(sword, x, y, null);
+						break;
+					case 'D':
+						gr.drawImage(drakeA, x, y, null);
+						break;
+					case 'd':
+						gr.drawImage(drakeS, x, y, null);
+						break;
+					case 'S':
+						gr.drawImage(exit, x, y, null);
+						break;
+					case 'A':
+						gr.drawImage(armed, x, y, null);
+						break;
+					case ' ':
+						gr.drawImage(floor, x, y, null);
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
+	
 		
 	}
 	
