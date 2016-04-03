@@ -90,7 +90,7 @@ public class Game {
 		for (int line = 0; line < Maze.length; line++) {
 			for (int col = 0; col < Maze.length; col++) {
 				s+=Maze[line][col];
-				s+=" ";
+				//s+=" ";
 			}
 			s+="\n";
 		}

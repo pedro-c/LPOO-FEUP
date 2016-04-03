@@ -8,17 +8,30 @@ import maze.logic.Game;
 import maze.logic.MazeBuilder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
 import javax.swing.JSlider;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.Button;
 
 public class Interface {
 
@@ -42,6 +55,9 @@ public class Interface {
 	private JComboBox<String> gameMode;
 	private JButton btnRandomMaze;
 	private JButton btnBuildMaze;
+	private JButton btnOpenMaze;
+	private JButton btnSaveMaze;
+	private  JFileChooser fc = new JFileChooser();
 
 	/**
 	 * Launch the application.
@@ -102,6 +118,8 @@ public class Interface {
 				btnRandomMaze.setEnabled(false);
 				btnBuildMaze.setVisible(false);
 				btnBuildMaze.setVisible(false);
+				btnOpenMaze.setEnabled(false);
+				btnOpenMaze.setVisible(false);
 			}
 		});
 		frmMaze.getContentPane().add(btnRandomMaze);
@@ -117,19 +135,74 @@ public class Interface {
 		btnBuildMaze.setBounds(446, 132, 147, 57);
 		frmMaze.getContentPane().add(btnBuildMaze);
 		frmMaze.setBounds(500, 200, 315 + 400, 500);
+		
+		
+		
+		
+		btnOpenMaze = new JButton("Open Maze");
+		btnOpenMaze.setBounds(446, 300, 147, 25);
+		btnOpenMaze.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Ficheiros de texto", "txt");
+				    fileChooser.setFileFilter(filter);
+		        int returnValue = fileChooser.showOpenDialog(null);
+		        if (returnValue == JFileChooser.APPROVE_OPTION) {
+		        	File selectedFile = fileChooser.getSelectedFile();
+		        	//reading   
+		            try{
+		                InputStream ips=new FileInputStream(selectedFile); 
+		                InputStreamReader ipsr=new InputStreamReader(ips);
+		                BufferedReader br=new BufferedReader(ipsr);
+		                String line;
+		                line=br.readLine();
+		                char[][] Maze = new char[line.length()][line.length()];
+		                int x=0;
+		                do{
+		                	for(int i=0;i<line.length();i++){
+		                		Maze[x][i]=line.charAt(i);
+		                	}
+		                	x++;
+		                }while((line=br.readLine())!=null);
+		                br.close(); 
+		                
+		                //start game
+		                g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, Maze);
+						graphicsPanel.setMaze(g);
+						graphicsPanel.setBounds(314, 13, x * 35, x * 35);
+						printMaze.setBounds(302, 10, x * 24, x * 24);
+						changeFrame(false);
 
-		graphicsPanel = new MazeGraphics();
-		graphicsPanel.setVisible(true);
-		graphicsPanel.setBounds(0, 0, 697, 453);
-		frmMaze.getContentPane().add(graphicsPanel);
+						lblcurretnState.setText("Pode jogar!");
 
-		graphicsPanel.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				keyMovement(e);
+						btnLeft.setEnabled(true);
+						btnRight.setEnabled(true);
+						btnUp.setEnabled(true);
+						btnDown.setEnabled(true);
+						btnLeft.setVisible(true);
+						btnRight.setVisible(true);
+						btnUp.setVisible(true);
+						btnDown.setVisible(true);
+						btnExitToMenu.setVisible(true);
+						graphicsPanel.requestFocus();
+						graphicsPanel.repaint();
+						btnRandomMaze.setVisible(false);
+						btnRandomMaze.setEnabled(false);
+						btnBuildMaze.setVisible(false);
+						btnBuildMaze.setVisible(false);
+						btnOpenMaze.setEnabled(false);
+						btnOpenMaze.setVisible(false);
+						btnSaveMaze.setEnabled(true);
+						btnSaveMaze.setVisible(true);
+		            }       
+		            catch (Exception e1){
+		                System.out.println(e1.toString());
+		            }
+		        }
 			}
 		});
-		graphicsPanel.setVisible(true);
+		frmMaze.getContentPane().add(btnOpenMaze);
 
 		mazeSize = new JLabel("Maze Size");
 		mazeSize.setBounds(7, 13, 111, 22);
@@ -261,6 +334,8 @@ public class Interface {
 				btnExitToMenu.setVisible(true);
 				graphicsPanel.requestFocus();
 				graphicsPanel.repaint();
+				btnSaveMaze.setEnabled(true);
+				btnSaveMaze.setVisible(true);
 
 			}
 		});
@@ -292,6 +367,34 @@ public class Interface {
 				keyMovement(e);
 			}
 		});
+		
+		btnSaveMaze = new JButton("Save Maze");
+		btnSaveMaze.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser();
+			    //chooser.setCurrentDirectory(new File("/home/me/Documents"));
+			    int retrival = chooser.showSaveDialog(null);
+			    if (retrival == JFileChooser.APPROVE_OPTION) {
+			    	try(FileWriter fw = new FileWriter(chooser.getSelectedFile()+".txt")) {
+			    		String s=g.toString();
+			    		
+			    		for(int i=0; i<s.length();i++){
+			    			if(s.charAt(i)=='\n'){
+			    				fw.write(System.getProperty( "line.separator" ));
+			    			}else{
+			    				fw.write(s.charAt(i));
+			    			}
+			    		}      
+			            fw.close();
+			    	}catch (Exception ex) {
+			            ex.printStackTrace();
+			        }
+			    }
+			}
+		});
+		btnSaveMaze.setBounds(46, 415, 183, 24);
+		btnSaveMaze.setVisible(false);
+		frmMaze.getContentPane().add(btnSaveMaze);
 		btnRight.setMaximumSize(new Dimension(80, 125));
 		frmMaze.getContentPane().add(btnRight);
 
@@ -323,6 +426,7 @@ public class Interface {
 		frmMaze.getContentPane().add(btnExit);
 
 		lblcurretnState = new JLabel("Create new maze!");
+		lblcurretnState.setVisible(false);
 		lblcurretnState.setBounds(19, 415, 245, 16);
 		lblcurretnState.setPreferredSize(new Dimension(525, 80));
 		lblcurretnState.setMaximumSize(new Dimension(525, 80));
@@ -359,6 +463,10 @@ public class Interface {
 				btnRandomMaze.setEnabled(true);
 				btnBuildMaze.setVisible(true);
 				btnBuildMaze.setVisible(true);
+				btnOpenMaze.setEnabled(true);
+				btnOpenMaze.setVisible(true);
+				btnSaveMaze.setEnabled(false);
+				btnSaveMaze.setVisible(false);
 				
 			}
 		});
@@ -367,7 +475,6 @@ public class Interface {
 		frmMaze.getContentPane().add(btnExitToMenu);
 
 		printMaze.setVisible(false);
-		lblcurretnState.setVisible(false);
 		btnUp.setVisible(false);
 		btnUp.setEnabled(false);
 		btnDown.setVisible(false);
@@ -387,6 +494,19 @@ public class Interface {
 		btnExit.setEnabled(false);
 		gameMode.setVisible(false);
 		gameMode.setEnabled(false);
+		
+				graphicsPanel = new MazeGraphics();
+				graphicsPanel.setVisible(true);
+				graphicsPanel.setBounds(0, 0, 697, 453);
+				frmMaze.getContentPane().add(graphicsPanel);
+				
+						graphicsPanel.addKeyListener(new KeyAdapter() {
+							@Override
+							public void keyPressed(KeyEvent e) {
+								keyMovement(e);
+							}
+						});
+						graphicsPanel.setVisible(true);
 		btnExitToMenu.setVisible(false);
 
 	}
@@ -455,6 +575,7 @@ public class Interface {
 			btnUp.setEnabled(false);
 			btnDown.setEnabled(false);
 			frmMaze.setBounds(500, 200, 315 + 400, 500);
+			
 
 		} else {
 			lblcurretnState.setText("Pode Jogar!");
@@ -476,9 +597,10 @@ public class Interface {
 		gameMode.setVisible(flag);
 		gameMode.setEnabled(flag);
 		btnExitToMenu.setVisible(flag);
+		
 		if (flag) {
 			frmMaze.setBounds(500, 200, 500, 322);
-			graphicsPanel.setBounds(305, 0, graphicsPanel.getWidth(), graphicsPanel.getHeight());
+			graphicsPanel.setBounds(305, 0, 430, 380);
 
 		} else {
 			frmMaze.setBounds(100, 100, graphicsPanel.getWidth() + 350, graphicsPanel.getHeight() + 80);
