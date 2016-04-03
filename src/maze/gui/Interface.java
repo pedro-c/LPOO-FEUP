@@ -20,18 +20,15 @@ import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-
 import javax.swing.JSlider;
 import java.awt.Component;
 import java.awt.Rectangle;
-import java.awt.Button;
+
 
 public class Interface {
 
@@ -57,7 +54,7 @@ public class Interface {
 	private JButton btnBuildMaze;
 	private JButton btnOpenMaze;
 	private JButton btnSaveMaze;
-	private  JFileChooser fc = new JFileChooser();
+
 
 	/**
 	 * Launch the application.
