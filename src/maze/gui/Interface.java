@@ -9,6 +9,7 @@ import maze.logic.MazeBuilder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -19,10 +20,13 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.swing.JSlider;
@@ -54,6 +58,8 @@ public class Interface {
 	private JButton btnBuildMaze;
 	private JButton btnOpenMaze;
 	private JButton btnSaveMaze;
+	private JButton btnNext;
+	private boolean creatingMaze = false;
 
 
 	/**
@@ -83,6 +89,7 @@ public class Interface {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
 		frmMaze = new JFrame();
 
 		frmMaze.getContentPane().setPreferredSize(new Dimension(2147483647, 2147483647));
@@ -126,46 +133,68 @@ public class Interface {
 		btnBuildMaze.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnBuildMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				mazeSize.setVisible(true);
+				dragonMode.setVisible(true);
+				mazeDimensions.setVisible(true);
+				drakesNumber.setVisible(true);
+				drakeNumber.setVisible(true);
+				dragonMode.setVisible(true);
+				btnExit.setVisible(true);
+				btnExit.setEnabled(true);
+				gameMode.setVisible(true);
+				gameMode.setEnabled(true);
+				graphicsPanel.setVisible(false);
+				btnRandomMaze.setVisible(false);
+				btnRandomMaze.setEnabled(false);
+				btnBuildMaze.setVisible(false);
+				btnBuildMaze.setVisible(false);
+				btnOpenMaze.setEnabled(false);
+				btnOpenMaze.setVisible(false);
+				btnNext.setVisible(true);
+				btnNext.setEnabled(true);
+				btnExitToMenu.setVisible(true);
+				btnExitToMenu.setEnabled(true);
+
 
 			}
 		});
 		btnBuildMaze.setBounds(446, 132, 147, 57);
 		frmMaze.getContentPane().add(btnBuildMaze);
 		frmMaze.setBounds(500, 200, 315 + 400, 500);
-		
-		
-		
-		
+
+
+
+
 		btnOpenMaze = new JButton("Open Maze");
 		btnOpenMaze.setBounds(446, 300, 147, 25);
 		btnOpenMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Ficheiros de texto", "txt");
-				    fileChooser.setFileFilter(filter);
-		        int returnValue = fileChooser.showOpenDialog(null);
-		        if (returnValue == JFileChooser.APPROVE_OPTION) {
-		        	File selectedFile = fileChooser.getSelectedFile();
-		        	//reading   
-		            try{
-		                InputStream ips=new FileInputStream(selectedFile); 
-		                InputStreamReader ipsr=new InputStreamReader(ips);
-		                BufferedReader br=new BufferedReader(ipsr);
-		                String line;
-		                line=br.readLine();
-		                char[][] Maze = new char[line.length()][line.length()];
-		                int x=0;
-		                do{
-		                	for(int i=0;i<line.length();i++){
-		                		Maze[x][i]=line.charAt(i);
-		                	}
-		                	x++;
-		                }while((line=br.readLine())!=null);
-		                br.close(); 
-		                
-		                //start game
-		                g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, Maze);
+						"Ficheiros de texto", "txt");
+				fileChooser.setFileFilter(filter);
+				int returnValue = fileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					//reading   
+					try{
+						InputStream ips=new FileInputStream(selectedFile); 
+						InputStreamReader ipsr=new InputStreamReader(ips);
+						BufferedReader br=new BufferedReader(ipsr);
+						String line;
+						line=br.readLine();
+						char[][] Maze = new char[line.length()][line.length()];
+						int x=0;
+						do{
+							for(int i=0;i<line.length();i++){
+								Maze[x][i]=line.charAt(i);
+							}
+							x++;
+						}while((line=br.readLine())!=null);
+						br.close(); 
+
+						//start game
+						g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, Maze);
 						graphicsPanel.setMaze(g);
 						graphicsPanel.setBounds(314, 13, x * 35, x * 35);
 						printMaze.setBounds(302, 10, x * 24, x * 24);
@@ -192,11 +221,11 @@ public class Interface {
 						btnOpenMaze.setVisible(false);
 						btnSaveMaze.setEnabled(true);
 						btnSaveMaze.setVisible(true);
-		            }       
-		            catch (Exception e1){
-		                System.out.println(e1.toString());
-		            }
-		        }
+					}       
+					catch (Exception e1){
+						System.out.println(e1.toString());
+					}
+				}
 			}
 		});
 		frmMaze.getContentPane().add(btnOpenMaze);
@@ -364,29 +393,29 @@ public class Interface {
 				keyMovement(e);
 			}
 		});
-		
+
 		btnSaveMaze = new JButton("Save Maze");
 		btnSaveMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
-			    //chooser.setCurrentDirectory(new File("/home/me/Documents"));
-			    int retrival = chooser.showSaveDialog(null);
-			    if (retrival == JFileChooser.APPROVE_OPTION) {
-			    	try(FileWriter fw = new FileWriter(chooser.getSelectedFile()+".txt")) {
-			    		String s=g.toString();
-			    		
-			    		for(int i=0; i<s.length();i++){
-			    			if(s.charAt(i)=='\n'){
-			    				fw.write(System.getProperty( "line.separator" ));
-			    			}else{
-			    				fw.write(s.charAt(i));
-			    			}
-			    		}      
-			            fw.close();
-			    	}catch (Exception ex) {
-			            ex.printStackTrace();
-			        }
-			    }
+				//chooser.setCurrentDirectory(new File("/home/me/Documents"));
+				int retrival = chooser.showSaveDialog(null);
+				if (retrival == JFileChooser.APPROVE_OPTION) {
+					try(FileWriter fw = new FileWriter(chooser.getSelectedFile()+".txt")) {
+						String s=g.toString();
+
+						for(int i=0; i<s.length();i++){
+							if(s.charAt(i)=='\n'){
+								fw.write(System.getProperty( "line.separator" ));
+							}else{
+								fw.write(s.charAt(i));
+							}
+						}      
+						fw.close();
+					}catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 		btnSaveMaze.setBounds(46, 415, 183, 24);
@@ -464,7 +493,7 @@ public class Interface {
 				btnOpenMaze.setVisible(true);
 				btnSaveMaze.setEnabled(false);
 				btnSaveMaze.setVisible(false);
-				
+
 			}
 		});
 		btnExitToMenu.setVisible(false);
@@ -491,118 +520,168 @@ public class Interface {
 		btnExit.setEnabled(false);
 		gameMode.setVisible(false);
 		gameMode.setEnabled(false);
-		
-				graphicsPanel = new MazeGraphics();
-				graphicsPanel.setVisible(true);
-				graphicsPanel.setBounds(0, 0, 697, 453);
-				frmMaze.getContentPane().add(graphicsPanel);
-				
-						graphicsPanel.addKeyListener(new KeyAdapter() {
-							@Override
-							public void keyPressed(KeyEvent e) {
-								keyMovement(e);
-							}
-						});
-						graphicsPanel.setVisible(true);
-		btnExitToMenu.setVisible(false);
 
-	}
-
-	private void keyMovement(KeyEvent e) {
-		char key;
-		key = e.getKeyChar();
-
-		if (key == 'w') {
-			updateGame(0);
-		} else if (key == 's') {
-			updateGame(1);
-		} else if (key == 'a') {
-			updateGame(2);
-		} else if (key == 'd') {
-			updateGame(3);
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			updateGame(3);
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			updateGame(2);
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			updateGame(0);
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			updateGame(1);
-		}
-
-	}
-
-	private void updateGame(int i) {
-		if (!g.gameLost && !g.gameWon) {
-			switch (i) {
-			case 0:
-				g.moveHeroUp();
-				break;
-			case 1:
-				g.moveHeroDown();
-				break;
-			case 2:
-				g.moveHeroLeft();
-				break;
-			case 3:
-				g.moveHeroRight();
-				break;
-			default:
-				break;
-			}
-		}
-
-		printMaze.setText(g.toString());
-		if (g.gameLost) {
-			graphicsPanel.setMaze(g);
-			changeFrame(true);
-			lblcurretnState.setText("You Lost! Try again.");
-			btnLeft.setEnabled(false);
-			btnRight.setEnabled(false);
-			btnUp.setEnabled(false);
-			btnDown.setEnabled(false);
-			frmMaze.setBounds(500, 200, 315 + 400, 500);
-
-		} else if (g.gameWon) {
-			graphicsPanel.setMaze(g);
-			changeFrame(true);
-			lblcurretnState.setText("You Won, Congrats!");
-			btnLeft.setEnabled(false);
-			btnRight.setEnabled(false);
-			btnUp.setEnabled(false);
-			btnDown.setEnabled(false);
-			frmMaze.setBounds(500, 200, 315 + 400, 500);
-			
-
-		} else {
-			lblcurretnState.setText("Pode Jogar!");
-		}
-		graphicsPanel.setMaze(g);
-		graphicsPanel.repaint();
-	}
-
-	public void changeFrame(boolean flag) {
-
-		printMaze.setVisible(false);
-		lblcurretnState.setVisible(flag);
-		mazeSize.setVisible(flag);
-		drakesNumber.setVisible(flag);
-		dragonMode.setVisible(flag);
-		mazeDimensions.setVisible(flag);
-		drakeNumber.setVisible(flag);
+		graphicsPanel = new MazeGraphics();
 		graphicsPanel.setVisible(true);
-		gameMode.setVisible(flag);
-		gameMode.setEnabled(flag);
-		btnExitToMenu.setVisible(flag);
-		
-		if (flag) {
-			frmMaze.setBounds(500, 200, 500, 322);
-			graphicsPanel.setBounds(305, 0, 430, 380);
+		graphicsPanel.setBounds(0, 0, 697, 453);
+		frmMaze.getContentPane().add(graphicsPanel);
 
-		} else {
-			frmMaze.setBounds(100, 100, graphicsPanel.getWidth() + 350, graphicsPanel.getHeight() + 80);
+		btnNext = new JButton("Next");
+		btnNext.setEnabled(false);
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int x = mazeDimensions.getValue();
+				if ((x % 2) == 0) {
+					x++;
+				}
+				char[][] maze = new char[x][x];
+				for(int i = 0; i < x; ++i)
+					for (int j = 0; j < x; ++j)
+						maze[i][j] ='X';
+
+				g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, maze);
+				graphicsPanel.setMaze(g);
+				graphicsPanel.setBounds(314, 13, x * 35, x * 35);
+				printMaze.setBounds(302, 10, x * 24, x * 24);
+				changeFrame(false);
+
+				btnNext.setEnabled(false);
+				btnNext.setVisible(false);
+				btnExitToMenu.setVisible(true);
+				btnExitToMenu.setEnabled(true);
+				creatingMaze = true;
+			}
+		});
+		btnNext.setBounds(46, 300, 183, 25);
+		frmMaze.getContentPane().add(btnNext);
+
+		graphicsPanel.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				keyMovement(e);
+			}
+		});
+		graphicsPanel.setVisible(true);
+
+	}
+
+
+	private class MyMouseAdapter extends MouseAdapter {
+		public void mouseClicked(MouseEvent e) {
+			if (!creatingMaze)
+				return;
+			
+			
+		}
+		public void mouseMoved(MouseEvent e) {
+			if (!creatingMaze)
+				return;
+			
+			
+		}
+		public void mouseDragged(MouseEvent e) {
+			if (!creatingMaze)
+				return;
+					
+		}
+	}
+		
+
+		private void keyMovement(KeyEvent e) {
+			char key;
+			key = e.getKeyChar();
+
+			if (key == 'w') {
+				updateGame(0);
+			} else if (key == 's') {
+				updateGame(1);
+			} else if (key == 'a') {
+				updateGame(2);
+			} else if (key == 'd') {
+				updateGame(3);
+			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				updateGame(3);
+			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				updateGame(2);
+			} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+				updateGame(0);
+			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				updateGame(1);
+			}
 
 		}
 
+		private void updateGame(int i) {
+			if (!g.gameLost && !g.gameWon) {
+				switch (i) {
+				case 0:
+					g.moveHeroUp();
+					break;
+				case 1:
+					g.moveHeroDown();
+					break;
+				case 2:
+					g.moveHeroLeft();
+					break;
+				case 3:
+					g.moveHeroRight();
+					break;
+				default:
+					break;
+				}
+			}
+
+			printMaze.setText(g.toString());
+			if (g.gameLost) {
+				graphicsPanel.setMaze(g);
+				changeFrame(true);
+				lblcurretnState.setText("You Lost! Try again.");
+				btnLeft.setEnabled(false);
+				btnRight.setEnabled(false);
+				btnUp.setEnabled(false);
+				btnDown.setEnabled(false);
+				frmMaze.setBounds(500, 200, 315 + 400, 500);
+
+			} else if (g.gameWon) {
+				graphicsPanel.setMaze(g);
+				changeFrame(true);
+				lblcurretnState.setText("You Won, Congrats!");
+				btnLeft.setEnabled(false);
+				btnRight.setEnabled(false);
+				btnUp.setEnabled(false);
+				btnDown.setEnabled(false);
+				frmMaze.setBounds(500, 200, 315 + 400, 500);
+
+
+			} else {
+				lblcurretnState.setText("Pode Jogar!");
+			}
+			graphicsPanel.setMaze(g);
+			graphicsPanel.repaint();
+		}
+
+		public void changeFrame(boolean flag) {
+
+			printMaze.setVisible(false);
+			lblcurretnState.setVisible(flag);
+			mazeSize.setVisible(flag);
+			drakesNumber.setVisible(flag);
+			dragonMode.setVisible(flag);
+			mazeDimensions.setVisible(flag);
+			drakeNumber.setVisible(flag);
+			graphicsPanel.setVisible(true);
+			gameMode.setVisible(flag);
+			gameMode.setEnabled(flag);
+			btnExitToMenu.setVisible(flag);
+
+			if (flag) {
+				frmMaze.setBounds(500, 200, 500, 322);
+				graphicsPanel.setBounds(305, 0, 430, 380);
+
+			} else {
+				frmMaze.setBounds(100, 100, graphicsPanel.getWidth() + 350, graphicsPanel.getHeight() + 80);
+
+			}
+
+		}
 	}
-}
