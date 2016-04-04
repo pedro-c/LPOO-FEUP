@@ -18,8 +18,8 @@ public class TestMazeWithRandomDragon {
 			{'X', ' ', 'X', ' ', 'X'},
 			{'X', ' ', ' ', 'D', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m2 = {
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
 			{'X', 'E', ' ', 'H', ' ', ' ', ' ', 'S'},
@@ -29,40 +29,40 @@ public class TestMazeWithRandomDragon {
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m3 = {
 			{'X', 'X', 'S', 'X', 'X'},
 			{'X', ' ', 'D', ' ', 'X'},
 			{'X', ' ', 'E', ' ', 'X'},
 			{'X', ' ', 'H', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m4 = {
 			{'X', 'X', 'X', 'X', 'X'},
 			{'X', ' ', 'H', ' ', 'X'},
 			{'X', ' ', 'E', ' ', 'X'},
 			{'X', ' ', 'D', ' ', 'X'},
 			{'X', 'X', 'S', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m5 = {
 			{'X', 'X', 'X', 'X', 'X'},
 			{'X', ' ', ' ', ' ', 'X'},
 			{'X', 'H', 'E', 'D', 'S'},
 			{'X', ' ', ' ', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m6 = {
 			{'X', 'X', 'X', 'X', 'X'},
 			{'X', ' ', ' ', ' ', 'X'},
 			{'S', 'D', 'E', 'H', 'X'},
 			{'X', ' ', ' ', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m7 = {
 			{'X', 'X', 'X', 'X', 'X', 'X'},
 			{'X', 'E', ' ', ' ', ' ', 'X'},
@@ -70,16 +70,16 @@ public class TestMazeWithRandomDragon {
 			{'X', ' ', ' ', ' ', ' ', 'X'},
 			{'X', ' ', ' ', ' ', 'H', 'S'},
 			{'X', 'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	char[][] m8 = {
 			{'X', 'X', 'X', 'X', 'X'},
 			{'X', 'E', 'X', ' ', 'S'},
 			{'X', 'X', 'H', 'X', 'X'},
 			{'X', ' ', 'X', 'D', 'X'},
 			{'X', 'X', 'X', 'X', 'X'}
-			};
-	
+	};
+
 	@Test(timeout=1000)
 	public void testRandomMaze(){
 		MazeBuilder mb = new MazeBuilder(11, 1, 1);
@@ -87,8 +87,8 @@ public class TestMazeWithRandomDragon {
 		Game g = new Game(3, mt);
 		assertEquals(11, mt.length);
 	}
-	
-	
+
+
 	@Test(timeout=1000)
 	public void triesToExitWithoutKillingDragon(){
 		boolean outcome1 = false;			
@@ -101,8 +101,8 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
-	
+
+
 	@Test(timeout=1000)
 	public void heroDoesntMove(){
 		boolean outcome1 = false, outcome2 = false, outcome3=false, outcome4 = false;			
@@ -120,7 +120,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test
 	public void DoesntKillAllDrakes(){
 		Game g = new Game(1, m1);
@@ -141,7 +141,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test
 	public void KillsAllDrakes(){
 		Game g = new Game(1, m1);
@@ -166,8 +166,8 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
-	
+
+
 	@Test
 	public void putsDrakeOverSword(){
 		boolean outcome1 = false;			
@@ -184,8 +184,8 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
-	
+
+
 	@Test
 	public void testMoveHeroUpVictory(){
 		Game g = new Game(1, m3);
@@ -200,7 +200,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test
 	public void testMoveHeroDownVictory(){
 		Game g = new Game(1, m4);
@@ -216,7 +216,7 @@ public class TestMazeWithRandomDragon {
 		}
 	}
 
-	
+
 	@Test
 	public void testMoveHeroRightVictory(){
 		Game g = new Game(1, m5);
@@ -232,7 +232,7 @@ public class TestMazeWithRandomDragon {
 		}
 	}
 
-	
+
 	@Test
 	public void testMoveHeroLeftVictory(){
 		Game g = new Game(1, m6);
@@ -264,7 +264,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test(timeout=1000)
 	public void testDrakeMovement() {
 		Point p1 = new Point(4,4);
@@ -290,8 +290,8 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
-	
+
+
 	@Test(timeout=10000)
 	public void testMoveHeroToWall() {
 		Game g = new Game(3, m1);
@@ -306,7 +306,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test(timeout=1000)
 	public void testMoveHeroToSword() {
 		Game g = new Game(3, m1);
@@ -321,7 +321,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test(timeout=1000)
 	public void testHeroDies() {
 		boolean outcome1 = false;
@@ -334,7 +334,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test
 	public void drakeAwakes(){
 		boolean outcome1 = false, outcome2 = false;
@@ -350,7 +350,7 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
+
 	@Test
 	public void drakeAsleep(){
 		boolean outcome1 = false;
@@ -365,8 +365,63 @@ public class TestMazeWithRandomDragon {
 				fail("some error message");
 		}
 	}
-	
-	
 
-	
+	@Test
+	public void testFireCounter(){
+		Game g = new Game(1, m1);
+		int i = g.Drakes.get(0).getFireCounter();
+
+		if(i < 4)
+			fail();
+
+		g.Drakes.get(0).advanceFireCounter();
+
+		int j = g.Drakes.get(0).getFireCounter();
+
+		if(j + 1 != i)
+			fail();
+
+		while(g.Drakes.get(0).getFireCounter() > 0)
+			g.Drakes.get(0).advanceFireCounter();
+
+		g.Drakes.get(0).advanceFireCounter();
+
+		if(g.Drakes.get(0).getFireCounter() != 9)
+			fail();
+	}
+
+	@Test
+	public void testMazeNumber(){
+		Game g = new Game(1, m1);
+
+		if(g.nDrakes != 1 || g.nSwords != 1 && g.nExits != 1)
+			fail();
+
+		g.moveHeroLeft();
+		g.moveHeroLeft();
+		
+		if(g.Swords.get(0).isDraw() == true)
+			fail();	
+		
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		g.moveHeroRight();
+		g.moveHeroLeft();
+		
+		if(g.Fires.size() > 0)
+			fail();
+
+	}
+
+
+
+
 }
