@@ -19,14 +19,16 @@ public class Game {
 	public boolean gameWon = false;
 	private GameStatus status;
 	private int mode;
-	public int nDrakes;
-	public int nSwords;
-	public int nExits;
+	private int fireTimer = 0;
+	public int nDrakes = 0;
+	public int nSwords = 0;
+	public int nExits = 0;
 	public char[][] Maze;
 	Hero hero = new Hero();
 	public ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
 	public ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
 	public ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
+	public ArrayList<Fire> Fires = new ArrayList<Fire>();
 
 	/**
 	 * Game Constructor.
@@ -37,7 +39,7 @@ public class Game {
 	 * @param maze The Maze itself
 	 */
 
-	public Game(int mode, int nDrakes, int nExits, int nSwords, char[][] maze)
+	public Game(int mode, char[][] maze)
 	{
 		this.mode = mode;
 		this.nDrakes = nDrakes;
@@ -61,27 +63,24 @@ public class Game {
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
 				if(Maze[i][j] == 'E')	{
-					Sword s1 = new Sword(i,j);
-					Swords.add(s1);
-
+					Swords.add(new Sword(i,j));
+					nSwords++;
 				}
 
 		//searches all dragons and adds them to the array
 		for(int i = 0; i < Maze.length; i++)
 			for(int j = 0; j < Maze[i].length; j++)
 				if(Maze[i][j] == 'D')	{
-					Drake d1 = new Drake(i,j);
-					Drakes.add(d1);
-
+					Drakes.add(new Drake(i,j));
+					nDrakes++;
 				}
 
 		// searches all Exits and adds them to the array
 		for (int i = 0; i < Maze.length; i++)
 			for (int j = 0; j < Maze[i].length; j++)
 				if (Maze[i][j] == 'S') {
-					Exit e1 = new Exit(i, j);
-					Exits.add(e1);
-
+					Exits.add(new Exit(i, j));
+					nExits++;
 				}
 
 	}
@@ -191,7 +190,7 @@ public class Game {
 		if (Maze[newLine][newCol] == 'S' && checkExit(newLine, newCol)) {
 			gameWon = true;
 		} 			
-		else if (Maze[newLine][newCol] == ' ') {
+		else if (Maze[newLine][newCol] == ' ' || Maze[newLine][newCol] == 'Y') {
 			hero.setLine(newLine);
 			hero.setCol(newCol);
 		} 
@@ -275,6 +274,8 @@ public class Game {
 	 * @param col Column where the Drake is
 	 */
 
+
+
 	public void killDrake(int line, int col) {
 
 		if(hero.getSymbol() != 'A' && Maze[line][col] == 'D')
@@ -301,7 +302,7 @@ public class Game {
 	}
 
 	/**
-	 * Returns an ArrayList of all Drakes' coordinates for testing purposes
+	 * Returns an ArrayList of all Drakes' coordinates
 	 * @return ArrayList of coordinates
 	 */
 
@@ -354,6 +355,69 @@ public class Game {
 	 * When the Drake wakes up, it has a 50% chance to move before the turn ends.
 	 * @param d The Drake to be moved
 	 */
+
+	public void createFireUp(int line, int col)
+	{
+		int nextLine = line - 1, nextCol = col;
+		while(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'H' || Maze[nextLine][nextCol] == 'A')
+		{
+			Fires.add(new Fire(nextLine, nextCol));
+			nextLine--;
+		}	
+	}
+	public void createFireDown(int line, int col)
+	{
+		int nextLine = line + 1, nextCol = col;
+		while(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'H' || Maze[nextLine][nextCol] == 'A')
+		{
+			Fires.add(new Fire(nextLine, nextCol));
+			nextLine++;
+		}	
+	}
+	public void createFireLeft(int line, int col)
+	{
+		int nextLine = line , nextCol = col - 1;
+		while(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'H' || Maze[nextLine][nextCol] == 'A')
+		{
+			Fires.add(new Fire(nextLine, nextCol));
+			nextCol--;
+		}	
+	}
+	public void createFireRight(int line, int col)
+	{
+		int nextLine = line, nextCol = col + 1;
+		while(Maze[nextLine][nextCol] == ' ' || Maze[nextLine][nextCol] == 'H' || Maze[nextLine][nextCol] == 'A')
+		{
+			Fires.add(new Fire(nextLine, nextCol));
+			nextCol++;
+		}	
+	}
+
+	public void spitFire(Drake d)
+	{
+		Random rand = new Random();
+
+		if(d.getFireCounter() == 0)
+		{
+			int direction = rand.nextInt(4);
+			switch(direction)
+			{
+			case 0: //Up
+				createFireUp(d.getLine(), d.getCol());
+				break;
+			case 1: //Down
+				createFireDown(d.getLine(), d.getCol());
+				break;
+			case 2: //Left
+				createFireLeft(d.getLine(), d.getCol());
+				break;
+			case 3: //Right
+				createFireRight(d.getLine(), d.getCol());
+				break;
+			}
+		}
+		d.advanceFireCounter();
+	}
 
 	public void moveDrake(Drake d)
 	{
@@ -441,36 +505,50 @@ public class Game {
 
 	public void updateMaze() {
 
-		// Puts Hero
-		Maze[hero.getLine()][hero.getCol()] = hero.getSymbol();
 
-		// Moves and puts Drakes
+		// Puts Fires
+		for(int i = 0; i < Fires.size(); i++)
+		{
+
+			Maze[Fires.get(i).getLine()][Fires.get(i).getCol()] = 'Y';
+			Fires.get(i).advanceTimer();
+			if(Fires.get(i).getTimer() == 0) //if the fire is not active anymore
+			{
+				Maze[Fires.get(i).getLine()][Fires.get(i).getCol()] = ' ';
+				Fires.remove(i);
+				i--;
+			}
+		}
+
+		// Puts Hero
+		if(Maze[hero.getLine()][hero.getCol()] == 'Y')
+		{
+			Maze[hero.getLine()][hero.getCol()] = 'B';
+			gameLost = true;
+			return;
+		}
+		else
+			Maze[hero.getLine()][hero.getCol()] = hero.getSymbol();
+
+
+
+		// Moves and puts Drakes. Also checks if they are gonna spit fire
 		for (int i = 0; i < nDrakes; i++){
-			if(!Drakes.get(i).isDead()) //If the drake is dead, don't bother moving it
+			if(!Drakes.get(i).isDead()) //If the drake is dead, don't bother doint anything
 			{
 				int curLine = Drakes.get(i).getLine(), curCol = Drakes.get(i).getCol();
 				moveDrake(Drakes.get(i));
 				Maze[curLine][curCol] = ' '; 
 				if(Drakes.get(i).isAsleep() == false)
+				{
 					Maze[Drakes.get(i).getLine()][Drakes.get(i).getCol()] = 'D';
+					spitFire(Drakes.get(i));
+				}
 				else
 					Maze[Drakes.get(i).getLine()][Drakes.get(i).getCol()] = 'd';
 
 			}
 		}
-		//checks for drakes adjacent to the hero
-
-		if(Maze[hero.getLine()][hero.getCol()-1] == 'D' || Maze[hero.getLine()][hero.getCol()-1] == 'd') 
-			killDrake(hero.getLine(),hero.getCol() - 1);
-		else if(Maze[hero.getLine()][hero.getCol()+1] == 'D' || Maze[hero.getLine()][hero.getCol()+1] == 'd')
-			killDrake(hero.getLine(),hero.getCol() + 1);
-		else if(Maze[hero.getLine()-1][hero.getCol()] == 'D' || Maze[hero.getLine()-1][hero.getCol()] == 'd')
-			killDrake(hero.getLine() - 1,hero.getCol());
-		else if(Maze[hero.getLine()+1][hero.getCol()] == 'D' || Maze[hero.getLine()+1][hero.getCol()] == 'd')
-			killDrake(hero.getLine() + 1,hero.getCol());
-
-		if(gameLost == true)
-			return;
 
 		// Puts Swords
 		for (int i = 0; i < nSwords; i++) {
@@ -482,6 +560,18 @@ public class Game {
 				if (Swords.get(i).isDraw())
 					Maze[Swords.get(i).getLine()][Swords.get(i).getCol()] = 'E';
 		}
+
+		//checks for drakes adjacent to the hero
+
+		if(Maze[hero.getLine()][hero.getCol()-1] == 'D' || Maze[hero.getLine()][hero.getCol()-1] == 'd') 
+			killDrake(hero.getLine(),hero.getCol() - 1);
+		else if(Maze[hero.getLine()][hero.getCol()+1] == 'D' || Maze[hero.getLine()][hero.getCol()+1] == 'd')
+			killDrake(hero.getLine(),hero.getCol() + 1);
+		else if(Maze[hero.getLine()-1][hero.getCol()] == 'D' || Maze[hero.getLine()-1][hero.getCol()] == 'd')
+			killDrake(hero.getLine() - 1,hero.getCol());
+		else if(Maze[hero.getLine()+1][hero.getCol()] == 'D' || Maze[hero.getLine()+1][hero.getCol()] == 'd')
+			killDrake(hero.getLine() + 1,hero.getCol());
+
 
 	}
 

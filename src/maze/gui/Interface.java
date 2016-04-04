@@ -193,7 +193,7 @@ public class Interface {
 						br.close();
 
 						// start game
-						g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, Maze);
+						g = new Game(gameMode.getSelectedIndex() + 1, Maze);
 						graphicsPanel.setMaze(g);
 						graphicsPanel.setBounds(314, 13, x * 35, x * 35);
 						printMaze.setBounds(302, 10, x * 24, x * 24);
@@ -339,7 +339,7 @@ public class Interface {
 				}
 				MazeBuilder mb = new MazeBuilder(x, drakeNumber.getValue(), 1);
 				char[][] mt = mb.maze;
-				g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, mt);
+				g = new Game(gameMode.getSelectedIndex() + 1, mt);
 				graphicsPanel.setMaze(g);
 				graphicsPanel.setBounds(314, 13, x * 35, x * 35);
 				printMaze.setBounds(302, 10, x * 24, x * 24);
@@ -579,7 +579,7 @@ public class Interface {
 			x++;
 		}
 		char[][] mt = m;
-		g = new Game(gameMode.getSelectedIndex() + 1, drakeNumber.getValue(), 1, 1, mt);
+		g = new Game(gameMode.getSelectedIndex() + 1, mt);
 		graphicsPanel.setMaze(g);
 		graphicsPanel.setBounds(314, 13, x * 35, x * 35);
 		printMaze.setBounds(302, 10, x * 24, x * 24);

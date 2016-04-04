@@ -90,7 +90,7 @@ public class MazeGenerator implements MouseListener {
 						String s = "";
 						for (int line = 0; line < buildMaze.maze.length; line++) {
 							for (int col = 0; col < buildMaze.maze.length; col++) {
-								s += buildMaze.maze[col][line];
+								s += buildMaze.maze[line][col];
 							}
 							s += "\n";
 						}
@@ -203,14 +203,10 @@ public class MazeGenerator implements MouseListener {
 
 	public void mousePress(Point arg0) {
 
-		System.out.print((int) arg0.getX());
-		System.out.print("rato");
 
 		int y = (int) arg0.getY();
-		System.out.print(y);
 		if (arg0.getX() >= 100 && arg0.getX() <= 135)
 			if (y >= 50 && y <= 85) {
-				System.out.print("heroi");
 				heroFlag = true;
 				swordFlag = false;
 				wallFlag = false;

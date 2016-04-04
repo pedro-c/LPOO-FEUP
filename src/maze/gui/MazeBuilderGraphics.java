@@ -120,24 +120,24 @@ public class MazeBuilderGraphics extends JPanel{
 		for(int i=0;i<this.maze.length;i++)
 			for(int j=0; j<this.maze.length;j++){
 				if(this.maze[i][j]=='H')
-					gr.drawImage(hero, i*35+50, j*35,null);
+					gr.drawImage(hero, i*IMAGE_SIZE+50, j*35,null);
 				else if(this.maze[i][j]=='E')
-					gr.drawImage(sword, i*35+50, j*35,null);
+					gr.drawImage(sword, i*IMAGE_SIZE+50, j*35,null);
 				else if(this.maze[i][j]=='D')
-					gr.drawImage(drake, i*35+50, j*35,null);
+					gr.drawImage(drake, i*IMAGE_SIZE+50, j*35,null);
 				else if(this.maze[i][j]=='S')
-					gr.drawImage(exit, i*35+50, j*35,null);
+					gr.drawImage(exit, i*IMAGE_SIZE+50, j*35,null);
 				else if(this.maze[i][j]=='X')
-					gr.drawImage(wall, i*35+50, j*35,null);
+					gr.drawImage(wall, i*IMAGE_SIZE+50, j*35,null);
 				else if(this.maze[i][j]==' ')
-					gr.drawImage(floor, i*35+50, j*35,null);
+					gr.drawImage(floor, i*IMAGE_SIZE+50, j*35,null);
 			}
 		
 	}
 	
 	public void setMaze(char character, int y, int x){
-		int a=y/35;
-		int b=x/35;
+		int a=y/IMAGE_SIZE;
+		int b=x/IMAGE_SIZE;
 		this.maze[b][a]=character;
 		
 		for(int i=0; i<mazeSize;i++){

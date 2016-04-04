@@ -1,5 +1,7 @@
 package maze.logic;
 
+import java.util.Random;
+
 /**
  * Drake class to be used in the Maze
  * @author Tiago & Pedro
@@ -11,6 +13,7 @@ public class Drake {
 	private int line, col;
 	private boolean dead;
 	private boolean asleep;
+	private int fireCounter;
 	
 	/**
 	 * Drake constructor. Drake starts as alive and awake
@@ -23,6 +26,8 @@ public class Drake {
 		this.col=col;
 		this.dead=false;
 		this.asleep=false;
+		Random rand = new Random();
+		fireCounter = rand.nextInt(6) + 4; //random cooldown between 4 and 9 for first time the drake spits fire
 	}
 
 	/**
@@ -66,6 +71,16 @@ public class Drake {
 	 * @param line Drake's new line
 	 */
 	
+	public int getFireCounter(){
+		return fireCounter;
+	}
+	
+	public void advanceFireCounter(){
+
+		fireCounter--;
+		if(fireCounter == - 1)
+			fireCounter = 9;
+	}
 	
 	public void setLine(int line) {
 		this.line = line;

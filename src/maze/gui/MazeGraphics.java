@@ -23,6 +23,7 @@ public class MazeGraphics extends JPanel  {
 	private BufferedImage sword;
 	private BufferedImage drakeA;
 	private BufferedImage drakeS;
+	private BufferedImage drakeOnSword;
 	private BufferedImage exit;
 	private BufferedImage wall;
 	private BufferedImage floor;
@@ -30,6 +31,7 @@ public class MazeGraphics extends JPanel  {
 	private BufferedImage menuImage;
 	private BufferedImage won;
 	private BufferedImage lost;
+	private BufferedImage fire;
 	public boolean gameLost = false;
 	public boolean gameWon = false;
 	private boolean menuFlag=true;
@@ -103,6 +105,16 @@ public class MazeGraphics extends JPanel  {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			fire =  ImageIO.read(new File("res/fire.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			drakeOnSword =  ImageIO.read(new File("res/drakeOnSword.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 
 	}
@@ -160,9 +172,23 @@ public class MazeGraphics extends JPanel  {
 					case 'A':
 						gr.drawImage(armed, x, y, null);
 						break;
+					case 'F':
+						gr.drawImage(floor, x, y, null);
+						gr.drawImage(drakeOnSword, x, y, null);
+						break;
 					case ' ':
 						gr.drawImage(floor, x, y, null);
 						break;
+					case 'Y':
+						gr.drawImage(floor, x, y, null);
+						gr.drawImage(fire, x, y, null);
+						break;
+					case 'B':
+						gr.drawImage(floor, x, y, null);
+						gr.drawImage(fire, x, y, null);
+						gr.drawImage(hero, x, y, null);
+						break;
+
 					default:
 						break;
 					}
