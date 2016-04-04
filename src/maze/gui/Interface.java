@@ -138,8 +138,8 @@ public class Interface {
 				mazeSize.setVisible(true);
 				dragonMode.setVisible(true);
 				mazeDimensions.setVisible(true);
-				drakesNumber.setVisible(true);
-				drakeNumber.setVisible(true);
+				drakesNumber.setVisible(false);
+				drakeNumber.setVisible(false);
 				dragonMode.setVisible(true);
 				btnExit.setVisible(true);
 				btnExit.setEnabled(true);
@@ -156,6 +156,8 @@ public class Interface {
 				btnNext.setEnabled(true);
 				btnExitToMenu.setVisible(true);
 				btnExitToMenu.setEnabled(true);
+				frmMaze.setBounds(500, 200, 340, 483);
+				
 
 			}
 		});
@@ -542,9 +544,11 @@ public class Interface {
 				 * btnExitToMenu.setVisible(true);
 				 * btnExitToMenu.setEnabled(true); creatingMaze = true;
 				 */
-
+				
 				mazeGenerator.setMazeSize(mazeDimensions.getValue());
+				mazeGenerator.resetBuild();
 				mazeGenerator.frame.setVisible(true);
+				mazeGenerator.frame.repaint();
 
 			}
 		});
@@ -559,6 +563,14 @@ public class Interface {
 		});
 		graphicsPanel.setVisible(true);
 
+	}
+	
+	public int getMazeSize(){
+		int x = mazeDimensions.getValue();
+		if ((x % 2) == 0) {
+			x++;
+		}
+		return x;
 	}
 
 	public void startGame(char[][] m, int size, int drakes) {

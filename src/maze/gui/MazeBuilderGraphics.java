@@ -27,7 +27,7 @@ public class MazeBuilderGraphics extends JPanel{
 
 	public char[][] maze; 
 
-	public MazeBuilderGraphics(){
+	public MazeBuilderGraphics(int mSize){
 		this.mazeSize=20;
 		this.maze = new char[mazeSize][mazeSize];
 	
@@ -90,6 +90,20 @@ public class MazeBuilderGraphics extends JPanel{
 	
 	public void setMazeSize(int x){
 		this.mazeSize=x;
+		
+		this.maze = new char[mazeSize][mazeSize];
+		
+		for(int i=0; i<mazeSize;i++){
+			for(int j=1; j<mazeSize;j++){
+				maze[i][j]=' ';
+			}
+			maze[i][0]='X';
+			maze[0][i]='X';
+			maze[i][mazeSize-1]='X';			
+		}	
+		for(int i=0;i<mazeSize;i++)
+			maze[mazeSize-1][i]='X';
+		
 		
 	}
 	

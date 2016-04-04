@@ -5,15 +5,9 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileWriter;
-
 import javax.swing.JFrame;
-
-import maze.logic.Game;
-import maze.logic.MazeBuilder;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -31,8 +25,14 @@ public class MazeGenerator implements MouseListener {
 	private Interface mainWindow;
 	private boolean heroPlaced;
 	private boolean exitPlaced;
-	private int mazeSize;
+	private int mazeSize = 20;
 	private int nDrakes;
+	private int nSwords;
+	private int nExits;
+	private int nHeros;
+	private JButton btnSave;
+	private JButton btnStart;
+	private JButton btnMenu;
 
 	/**
 	 * Launch the application.
@@ -70,14 +70,14 @@ public class MazeGenerator implements MouseListener {
 		frame.setBounds(100, 100, 800, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-
-		buildMaze = new MazeBuilderGraphics();
-		// buildMaze.setMazeSize(mazeSize);
+		// mazeSize=mainWindow.getMazeSize();
+		buildMaze = new MazeBuilderGraphics(mazeSize);
+		buildMaze.setMazeSize(mazeSize);
 		buildMaze.setBounds(100, 0, 472, 463);
 		frame.getContentPane().add(buildMaze);
 
-		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(0, 33, 97, 25);
+		btnSave = new JButton("Save");
+		btnSave.setBounds(0, 118, 97, 25);
 		frame.getContentPane().add(btnSave);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -110,24 +110,27 @@ public class MazeGenerator implements MouseListener {
 			}
 		});
 
-		JButton btnStart = new JButton("Start");
-		btnStart.setBounds(0, 71, 97, 25);
+		btnStart = new JButton("Start");
+		btnStart.setBounds(0, 156, 97, 25);
 		frame.getContentPane().add(btnStart);
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				mainWindow.startGame(buildMaze.maze, 20, nDrakes);
-
+				if(nExits==0 || nDrakes==0 || nSwords==0 || nHeros==0){
+					
+				}else{
+					mainWindow.startGame(buildMaze.maze, mazeSize, nDrakes);
+				}
+				
 			}
 		});
 
-		JButton btnMenu = new JButton("Menu");
+		btnMenu = new JButton("Menu");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				mainWindow.backToMenu();
 			}
 		});
-		btnMenu.setBounds(0, 119, 97, 25);
+		btnMenu.setBounds(0, 204, 97, 25);
 		frame.getContentPane().add(btnMenu);
 
 		frame.setSize(605, 510);
@@ -144,7 +147,7 @@ public class MazeGenerator implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-
+		buildMaze.repaint();
 	}
 
 	@Override
@@ -167,9 +170,35 @@ public class MazeGenerator implements MouseListener {
 
 	public void setMazeSize(int x) {
 		this.mazeSize = x;
-		frame.setBounds(100, 100, mazeSize * 35 + 50, mazeSize * 35 + 50);
+		frame.setBounds(100, 100, mazeSize * 35 + 180, mazeSize * 35 + 50);
 		buildMaze.setBounds(100, 0, mazeSize * 35 + 50, mazeSize * 35 + 50);
-
+		buildMaze.setMazeSize(x);
+		buildMaze.repaint();
+	}
+	
+	public void resetBuild(){
+		nDrakes=0;
+		nExits=0;
+		nHeros=0;
+		nSwords=0;
+		buildMaze = new MazeBuilderGraphics(mazeSize);
+		buildMaze.setMazeSize(mazeSize);
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(btnSave);
+		frame.getContentPane().add(btnMenu);
+		frame.getContentPane().add(btnStart);
+		frame.getContentPane().add(buildMaze);
+		heroFlag=false;
+		swordFlag=false;
+		wallFlag=false;
+		floorFlag=false;
+		exitFlag=false;
+		drakeFlag=false;
+		heroPlaced=false;
+		exitPlaced=false;
+		frame.setBounds(100, 100, mazeSize * 35 + 180, mazeSize * 35 + 50);
+		buildMaze.setBounds(100, 0, mazeSize * 35 + 50, mazeSize * 35 + 50);
+		buildMaze.repaint();
 	}
 
 	public void mousePress(Point arg0) {
@@ -248,15 +277,28 @@ public class MazeGenerator implements MouseListener {
 
 		if (arg0.getX() > 150)
 			if (heroFlag && !heroPlaced) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
+					nExits--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'E') {
+					nSwords--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'D') {
 					nDrakes--;
 				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
 					exitPlaced = false;
 				}
+				nHeros++;
 				heroPlaced = true;
 				buildMaze.setMaze('H', (int) y - 8, (int) arg0.getX() - 150);
 			} else if (swordFlag) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
+					nExits--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
+					nHeros--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'D') {
 					nDrakes--;
 				}
@@ -266,8 +308,18 @@ public class MazeGenerator implements MouseListener {
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
 					exitPlaced = false;
 				}
+				nSwords++;
 				buildMaze.setMaze('E', (int) y - 8, (int) arg0.getX() - 150);
 			} else if (wallFlag) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
+					nExits--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'E') {
+					nSwords--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
+					nHeros--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'D') {
 					nDrakes--;
 				}
@@ -279,6 +331,15 @@ public class MazeGenerator implements MouseListener {
 				}
 				buildMaze.setMaze('X', (int) y - 8, (int) arg0.getX() - 150);
 			} else if (floorFlag) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
+					nExits--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'E') {
+					nSwords--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
+					nHeros--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'D') {
 					nDrakes--;
 				}
@@ -290,15 +351,31 @@ public class MazeGenerator implements MouseListener {
 				}
 				buildMaze.setMaze(' ', (int) y, (int) arg0.getX() - 150);
 			} else if (exitFlag && !exitPlaced) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'E') {
+					nSwords--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
+					nHeros--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'D') {
 					nDrakes--;
 				}
+				nExits++;
 				exitPlaced = true;
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
 					heroPlaced = false;
 				}
 				buildMaze.setMaze('S', (int) y, (int) arg0.getX() - 150);
 			} else if (drakeFlag) {
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
+					nExits--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'E') {
+					nSwords--;
+				}
+				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'H') {
+					nHeros--;
+				}
 				if (buildMaze.maze[((int) arg0.getX() - 150) / 35][(y - 8) / 35] == 'S') {
 					exitPlaced = false;
 				}
