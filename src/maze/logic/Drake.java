@@ -7,9 +7,8 @@ import java.util.Random;
  *
  */
 
-public class Drake {
+public class Drake extends MazeObject {
 
-	private int line, col;
 	private boolean dead;
 	private boolean asleep;
 	private int fireCounter;
@@ -21,31 +20,13 @@ public class Drake {
 	 */
 	
 	public Drake (int line, int col){
-		this.line=line;
-		this.col=col;
+		super(line, col);
 		this.dead=false;
 		this.asleep=false;
 		Random rand = new Random();
 		fireCounter = rand.nextInt(6) + 4; //random cooldown between 4 and 9 for first time the drake spits fire
 	}
 
-	/**
-	 * 
-	 * @return Line where the Drake is located
-	 */
-	
-	public int getLine() {
-		return line;
-	}
-	
-	/**
-	 * 
-	 * @return Column where the Drake is located
-	 */
-
-	public int getCol() {
-		return col;
-	}
 
 	/**
 	 * 
@@ -85,23 +66,6 @@ public class Drake {
 			fireCounter = 9;
 	}
 	
-	/**
-	 * Sets Drake's line to specified value
-	 * @param line Drake's new line
-	 */
-	
-	public void setLine(int line) {
-		this.line = line;
-	}
-
-	/**
-	 * Sets Drake's column to specified value
-	 * @param col Drake's new column
-	 */
-	
-	public void setCol(int col) {
-		this.col = col;
-	}
 
 	/**
 	 * Sets Drake's dead status to specified status

@@ -5,10 +5,8 @@ package maze.logic;
  *
  */
 
-public class Sword {
-	
+public class Sword extends MazeObject{
 
-	private int line, col;
 	private boolean draw;
 
 	/**
@@ -18,27 +16,9 @@ public class Sword {
 	 */
 	
 	public Sword (int line, int col){
-		this.line=line;
-		this.col=col;
-		this.draw=true;
-	}
+		super(line, col);
 
-	/**
-	 * 
-	 * @return Line where the Sword is located
-	 */
-	
-	public int getLine() {
-		return line;
-	}
-	
-	/**
-	 * 
-	 * @return Column where the Sword is located
-	 */
-	
-	public int getCol() {
-		return col;
+		this.draw=true;
 	}
 
 	/**
@@ -48,24 +28,6 @@ public class Sword {
 	
 	public boolean isDraw() {
 		return draw;
-	}
-	
-	/**
-	 * Sets Sword's line to specified value
-	 * @param line Sword's new line
-	 */
-	
-	public void setLine(int line) {
-		this.line = line;
-	}
-	
-	/**
-	 * Sets Sword's column to specified value
-	 * @param col Sword's new column
-	 */
-
-	public void setCol(int col) {
-		this.col = col;
 	}
 
 	/**

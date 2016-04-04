@@ -23,7 +23,7 @@ public class Game {
 	 * GameStatus Enum to store all possible game statuses.
 	 *
 	 */
-	
+
 	public enum GameStatus {
 		HeroUnarmed, HeroArmed, HeroDied;
 	}
@@ -31,81 +31,81 @@ public class Game {
 	/**
 	 * Tracks if the game is lost or not
 	 */
-	
+
 	public boolean gameLost = false;
-	
+
 	/**
 	 * Tracs if the game is won or not
 	 */
 	public boolean gameWon = false;
-	
+
 	/**
 	 * Tracks the game status, i.e. the condition of the Hero
 	 */
-	
+
 	public GameStatus status;
-	
+
 	/**
 	 * Stores game mode.
 	 * 1 means Static Drake
 	 * 2 means Moving Drake
 	 * 3 means Moving and Sleeping Drake
 	 */
-	
+
 	public int mode;
-	
+
 	/**
 	 * Number of drakes in the maze
 	 */
-	
+
 	public int nDrakes = 0;
-	
+
 	/**
 	 * Number of swords in the maze
 	 */
-	
+
 	public int nSwords = 0;
-	
+
 	/**
 	 * Number of exits in the maze
 	 */
-	
+
 	public int nExits = 0;
-	
+
 	/**
 	 * Char matrix to store the maze. Each object is stored as a differente char
 	 */
-	
+
 	public char[][] Maze;
-	
+
 	/**
 	 * The Hero in the maze
 	 */
-	
-	Hero hero = new Hero();
-	
+
+	Hero hero = new Hero(-1, -1);
+
 	/**
 	 * ArrayList to store all drakes in the maze
 	 */
-	
+
 	public ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
-	
+
 	/**
 	 * ArrayList to store all swords in the maze
 	 */
-	
+
 	public ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
-	
+
 	/**
 	 * ArrayList to store all exits in the maze
 	 */
-	
+
 	public ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
-	
+
 	/**
 	 * ArrayList to store all fires in the maze
 	 */
-	
+
 	public ArrayList<Fire> Fires = new ArrayList<Fire>();
 
 	/**
@@ -167,7 +167,10 @@ public class Game {
 		String s = "";
 		for (int line = 0; line < Maze.length; line++) {
 			for (int col = 0; col < Maze.length; col++) {
-				s+=Maze[line][col];
+				if(Maze[line][col] != 'Y')
+					s+=Maze[line][col];
+				else
+					s+=' ';
 				//s+=" ";
 			}
 			s+="\n";
@@ -423,7 +426,7 @@ public class Game {
 	 * @param line Line where the fire begins
 	 * @param col Column where the fire begins
 	 */
-	
+
 	public void createFireUp(int line, int col)
 	{
 		int nextLine = line - 1, nextCol = col;
@@ -433,13 +436,13 @@ public class Game {
 			nextLine--;
 		}	
 	}
-	
+
 	/**
 	 * Creates a column of fire in the downwards direction of the drake
 	 * @param line Line where the fire begins
 	 * @param col Column where the fire begins
 	 */
-	
+
 	public void createFireDown(int line, int col)
 	{
 		int nextLine = line + 1, nextCol = col;
@@ -449,13 +452,13 @@ public class Game {
 			nextLine++;
 		}	
 	}
-	
+
 	/**
 	 * Creates a line of fire in the leftwards direction of the drake
 	 * @param line Line where the fire begins
 	 * @param col Column where the fire begins
 	 */
-	
+
 	public void createFireLeft(int line, int col)
 	{
 		int nextLine = line , nextCol = col - 1;
@@ -465,13 +468,13 @@ public class Game {
 			nextCol--;
 		}	
 	}
-	
+
 	/**
 	 * Creates a line of fire in the rightwards direction of the drake
 	 * @param line Line where the fire begins
 	 * @param col Column where the fire begins
 	 */
-	
+
 	public void createFireRight(int line, int col)
 	{
 		int nextLine = line, nextCol = col + 1;
@@ -488,7 +491,7 @@ public class Game {
 	 * Drake can fire directly into a wall, thus not creating any flames on the Maze.
 	 * @param d Drake to be checked
 	 */
-	
+
 	public void spitFire(Drake d)
 	{
 		Random rand = new Random();
@@ -514,7 +517,7 @@ public class Game {
 		}
 		d.advanceFireCounter();
 	}
-	
+
 	/**
 	 * Attempts to move the Drake based on the game mode and on probabilities:
 	 * On "Static Mode", the Drake will not move. On other modes, the Drake will have a 50% likelihood of moving.

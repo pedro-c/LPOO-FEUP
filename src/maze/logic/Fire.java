@@ -6,9 +6,8 @@ package maze.logic;
  *
  */
 
-public class Fire {
+public class Fire extends MazeObject{
 
-	private int line, col;
 	private int timer;
 
 	/**
@@ -19,8 +18,7 @@ public class Fire {
 
 	Fire(int line, int col)
 	{
-		this.line = line;
-		this.col = col;
+		super(line, col);
 		timer = 4;
 	}
 
@@ -35,24 +33,6 @@ public class Fire {
 
 	/**
 	 * 
-	 * @return Line where the fire is located
-	 */
-
-	public int getLine() {
-		return line;
-	}
-
-	/**
-	 * 
-	 * @return Column where the fire is located
-	 */
-
-	public int getCol() {
-		return col;
-	}
-
-	/**
-	 * 
 	 * @return Number of turns until the fire dies down
 	 */
 	
@@ -60,7 +40,5 @@ public class Fire {
 	public int getTimer() {
 		return timer;
 	}
-
-
 
 }

@@ -5,9 +5,8 @@ package maze.logic;
  *
  */
 
-public class Exit {
+public class Exit extends MazeObject {
 
-	private int line, col;
 	private boolean open;
 	
 	/**
@@ -17,27 +16,8 @@ public class Exit {
 	 */
 	
 	public Exit (int line, int col){
-		this.line=line;
-		this.col=col;
+		super(line, col);
 		open=false;
-	}
-
-	/**
-	 * 
-	 * @return Line where the Exit is located
-	 */
-	
-	public int getLine() {
-		return line;
-	}
-	
-	/**
-	 * 
-	 * @return Column where the Exit is located
-	 */
-
-	public int getCol() {
-		return col;
 	}
 
 	/**

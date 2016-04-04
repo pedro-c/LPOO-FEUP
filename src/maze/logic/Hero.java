@@ -5,9 +5,8 @@ package maze.logic;
  *
  */
 
-public class Hero {
+public class Hero extends MazeObject {
 	
-	private int line, col;
 	private char symbol;
 	
 	/**
@@ -17,38 +16,11 @@ public class Hero {
 	 */
 	
 	public Hero (int line, int col){
-		this.line=line;
-		this.col=col;
+		super(line, col);
 		symbol='H';
 
 	}
-	
-	/**
-	 * Hero constructor without coordinates indication
-	 */
-	
-	public Hero()
-	{
-		symbol = 'H';
-	}
-	
-	/**
-	 * 
-	 * @return Line where the Hero is located
-	 */
-	
-	public int getLine(){
-		return line;
-	}
-	
-	/**
-	 * 
-	 * @return Column where the Hero is located
-	 */
-	
-	public int getCol(){
-		return col;
-	}
+
 	
 	/**
 	 * 
@@ -59,23 +31,6 @@ public class Hero {
 		return symbol;
 	}
 	
-	/**
-	 * Sets Hero's line to specified value
-	 * @param line Hero's new line
-	 */
-	
-	public void setLine(int line) {
-		this.line = line;
-	}
-	
-	/**
-	 * Sets Hero's column to specified value
-	 * @param col Hero's new column
-	 */
-	
-	public void setCol(int col) {
-		this.col = col;
-	}
 	
 	/**
 	 * Sets Hero's symbol to specified value
