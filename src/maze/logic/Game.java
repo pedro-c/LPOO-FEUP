@@ -444,14 +444,7 @@ public class Game {
 
 		//checks for drakes adjacent to the hero
 
-		if(Maze[hero.getLine()][hero.getCol()-1] == 'D' || Maze[hero.getLine()][hero.getCol()-1] == 'd') 
-			killDrake(hero.getLine(),hero.getCol() - 1);
-		else if(Maze[hero.getLine()][hero.getCol()+1] == 'D' || Maze[hero.getLine()][hero.getCol()+1] == 'd')
-			killDrake(hero.getLine(),hero.getCol() + 1);
-		else if(Maze[hero.getLine()-1][hero.getCol()] == 'D' || Maze[hero.getLine()-1][hero.getCol()] == 'd')
-			killDrake(hero.getLine() - 1,hero.getCol());
-		else if(Maze[hero.getLine()+1][hero.getCol()] == 'D' || Maze[hero.getLine()+1][hero.getCol()] == 'd')
-			killDrake(hero.getLine() + 1,hero.getCol());
+		
 
 		// Moves and puts Drakes
 		for (int i = 0; i < nDrakes; i++){
@@ -468,6 +461,15 @@ public class Game {
 			}
 		}
 
+		if(Maze[hero.getLine()][hero.getCol()-1] == 'D' || Maze[hero.getLine()][hero.getCol()-1] == 'd') 
+			killDrake(hero.getLine(),hero.getCol() - 1);
+		else if(Maze[hero.getLine()][hero.getCol()+1] == 'D' || Maze[hero.getLine()][hero.getCol()+1] == 'd')
+			killDrake(hero.getLine(),hero.getCol() + 1);
+		else if(Maze[hero.getLine()-1][hero.getCol()] == 'D' || Maze[hero.getLine()-1][hero.getCol()] == 'd')
+			killDrake(hero.getLine() - 1,hero.getCol());
+		else if(Maze[hero.getLine()+1][hero.getCol()] == 'D' || Maze[hero.getLine()+1][hero.getCol()] == 'd')
+			killDrake(hero.getLine() + 1,hero.getCol());
+		
 		// Puts Swords
 		for (int i = 0; i < nSwords; i++) {
 			if (Maze[Swords.get(i).getLine()][Swords.get(i).getCol()] == 'D'){ //Checks if there is drake in the tile
