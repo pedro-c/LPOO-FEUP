@@ -18,21 +18,21 @@ public class TestMazeWithStaticDragon {
 
 	@Test
 	public void testMoveHeroToFreeCell() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1,m1);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 		g.moveHeroLeft();
 		assertEquals(new Point(1, 2), g.getHeroPosition());
 	}
 	@Test
 	public void testMoveHeroToWall() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 		g.moveHeroUp();
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 	}
 	@Test
 	public void testMoveHeroToSword() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1,  m1);
 		assertEquals(GameStatus.HeroUnarmed, g.getStatus());
 		g.moveHeroLeft();
 		g.moveHeroLeft();
@@ -42,7 +42,7 @@ public class TestMazeWithStaticDragon {
 	
 	@Test
 	public void testHeroDies() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1,m1);
 		assertEquals(GameStatus.HeroUnarmed, g.getStatus());
 		g.moveHeroDown();
 		assertEquals(GameStatus.HeroDied, g.getStatus());
@@ -50,7 +50,7 @@ public class TestMazeWithStaticDragon {
 	
 	@Test
 	public void testHeroKills() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		assertEquals(false, g.getDrakeStatus(3, 3));
 		g.moveHeroLeft();
 		g.moveHeroLeft();
@@ -62,7 +62,7 @@ public class TestMazeWithStaticDragon {
 	
 	@Test
 	public void testVictory() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		assertEquals(false, g.gameWon);
 		g.moveHeroLeft();
 		g.moveHeroLeft();
@@ -78,7 +78,7 @@ public class TestMazeWithStaticDragon {
 	
 	@Test
 	public void testUnsuccessfulExitWithoutSword() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		assertEquals(false, g.gameWon);
 		g.moveHeroRight();
 		assertEquals(false, g.gameWon);
@@ -86,7 +86,7 @@ public class TestMazeWithStaticDragon {
 	
 	@Test
 	public void testUnsuccessfulExiWithSword() {
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		assertEquals(false, g.gameWon);
 		g.moveHeroLeft();
 		g.moveHeroLeft();

@@ -84,7 +84,7 @@ public class TestMazeWithRandomDragon {
 	public void testRandomMaze(){
 		MazeBuilder mb = new MazeBuilder(11, 1, 1);
 		char[][] mt = mb.maze;
-		Game g = new Game(3, 1, 1, 1, mt);
+		Game g = new Game(3, mt);
 		assertEquals(11, mt.length);
 	}
 	
@@ -93,7 +93,7 @@ public class TestMazeWithRandomDragon {
 	public void triesToExitWithoutKillingDragon(){
 		boolean outcome1 = false;			
 		while (! outcome1) {
-			Game g = new Game(1, 1, 1, 1, m1);
+			Game g = new Game(1, m1);
 			g.moveHeroRight();
 			if (g.checkExit(1, 4) == false)
 				outcome1 = true;
@@ -107,7 +107,7 @@ public class TestMazeWithRandomDragon {
 	public void heroDoesntMove(){
 		boolean outcome1 = false, outcome2 = false, outcome3=false, outcome4 = false;			
 		while (! outcome1 || !outcome2 || !outcome3 || !outcome4) {
-			Game g = new Game(1, 1, 1, 1, m8);
+			Game g = new Game(1,m8);
 			if (g.moveHeroDown() == false)
 				outcome1 = true;
 			if (g.moveHeroLeft() == false)
@@ -123,7 +123,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void DoesntKillAllDrakes(){
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		boolean outcome1 = false;
 		Drake d1 = new Drake(3,1);
 		Drake d2 = new Drake(2,1);
@@ -144,7 +144,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void KillsAllDrakes(){
-		Game g = new Game(1, 1, 1, 1, m1);
+		Game g = new Game(1, m1);
 		boolean outcome1 = false;
 		Drake d1 = new Drake(3,1);
 		Drake d2 = new Drake(2,1);
@@ -172,7 +172,7 @@ public class TestMazeWithRandomDragon {
 	public void putsDrakeOverSword(){
 		boolean outcome1 = false;			
 		while (! outcome1) {
-			Game g = new Game(1, 1, 1, 1, m7);
+			Game g = new Game(1,m7);
 			Sword s = new Sword(2,2);
 			g.updateMaze();
 			g.Swords.add(s);
@@ -188,7 +188,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void testMoveHeroUpVictory(){
-		Game g = new Game(1, 1, 1, 1, m3);
+		Game g = new Game(1, m3);
 		boolean outcome1 = false;
 		while (! outcome1) {
 			g.moveHeroUp();
@@ -203,7 +203,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void testMoveHeroDownVictory(){
-		Game g = new Game(1, 1, 1, 1, m4);
+		Game g = new Game(1, m4);
 		boolean outcome1 = false;
 		while (! outcome1) {
 			g.moveHeroDown();
@@ -219,7 +219,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void testMoveHeroRightVictory(){
-		Game g = new Game(1, 1, 1, 1, m5);
+		Game g = new Game(1, m5);
 		boolean outcome1 = false;
 		while (! outcome1) {
 			g.moveHeroRight();
@@ -235,7 +235,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test
 	public void testMoveHeroLeftVictory(){
-		Game g = new Game(1, 1, 1, 1, m6);
+		Game g = new Game(1, m6);
 		boolean outcome1 = false;
 		while (! outcome1) {
 			g.moveHeroLeft();
@@ -252,7 +252,7 @@ public class TestMazeWithRandomDragon {
 
 	@Test(timeout=1000)
 	public void testMoveHeroToFreeCell() {
-		Game g = new Game(3, 1, 1, 1, m1);
+		Game g = new Game(3, m1);
 		Point p = new Point(1,2);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 		boolean outcome1 = false;
@@ -274,7 +274,7 @@ public class TestMazeWithRandomDragon {
 		Point p5 = new Point(4,3);
 		boolean outcome1 = false, outcome2 = false, outcome3=false, outcome4 = false, outcome5=false;			
 		while (! outcome1 || !outcome2 || !outcome3 || !outcome4 || !outcome5) {
-			Game g = new Game(3, 1, 1, 1, m2);
+			Game g = new Game(3, m2);
 			g.moveDrake(g.Drakes.get(0));
 			if (p1.equals(g.getDrakesPositions().get(0)))
 				outcome1 = true;
@@ -294,7 +294,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test(timeout=10000)
 	public void testMoveHeroToWall() {
-		Game g = new Game(3, 1, 1, 1, m1);
+		Game g = new Game(3, m1);
 		Point p = new Point(1, 3);
 		assertEquals(new Point(1, 3), g.getHeroPosition());
 		boolean outcome1 = false;
@@ -309,7 +309,7 @@ public class TestMazeWithRandomDragon {
 	
 	@Test(timeout=1000)
 	public void testMoveHeroToSword() {
-		Game g = new Game(3, 1, 1, 1, m1);
+		Game g = new Game(3, m1);
 		boolean outcome1 = false;
 		while (! outcome1) {
 			assertEquals(GameStatus.HeroUnarmed, g.getStatus());
@@ -326,7 +326,7 @@ public class TestMazeWithRandomDragon {
 	public void testHeroDies() {
 		boolean outcome1 = false;
 		while (! outcome1) {
-			Game g = new Game(1, 1, 1, 1, m1);
+			Game g = new Game(1, m1);
 			g.moveHeroDown();							
 			if (GameStatus.HeroDied == g.getStatus())
 				outcome1 = true;
@@ -339,7 +339,7 @@ public class TestMazeWithRandomDragon {
 	public void drakeAwakes(){
 		boolean outcome1 = false, outcome2 = false;
 		while (! outcome1 || !outcome2) {
-			Game g = new Game(3, 1, 1, 1, m2);
+			Game g = new Game(3, m2);
 			g.Drakes.get(0).setAsleep(true);
 			g.moveDrake(g.Drakes.get(0));
 			if (g.Drakes.get(0).isAsleep()==false)
@@ -355,7 +355,7 @@ public class TestMazeWithRandomDragon {
 	public void drakeAsleep(){
 		boolean outcome1 = false;
 		while (! outcome1) {
-			Game g = new Game(1, 1, 1, 1, m1);
+			Game g = new Game(1, m1);
 			g.Drakes.get(0).setAsleep(true);
 			g.updateMaze();
 			g.killDrake(3,3);

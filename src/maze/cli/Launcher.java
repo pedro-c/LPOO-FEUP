@@ -74,7 +74,7 @@ public class Launcher {
 		
 		char[][] mt = mb.maze;
 		
-		Game g = new Game(mode, 1, 1, 1, mt);
+		Game g = new Game(mode, mt);
 
 
 		while(!g.gameLost && !g.gameWon){
