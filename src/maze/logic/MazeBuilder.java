@@ -2,12 +2,34 @@ package maze.logic;
 
 import java.util.*;
 
+/**
+ * MazeBuilder class.
+ * Generates a random maze to be used in the Game class
+ * The algorithm used generates a square maze with the given size.
+ * Size must be an odd integer.
+ * A valid maze requires that it exists an unblocked path between the Hero and a Sword
+ * 
+ * We used an algorithm with is heavely influenced on an algorithm developed by Henrique Ferrolho.
+ * @see <a href="http://difusal.blogspot.pt/2014/02/maze-generation-algorithm.html">Henrique Ferrolho's Algorithm</a>
+ * 
+ * @author Tiago & Pedro
+ *
+ *
+ */
+
+
 public class MazeBuilder {
 
 	public enum Direction {
 		right, left, up, down, NULL;
 	}
 
+	/**
+	 * To be used to store coordinates
+	 * @author Tiago & Pedro
+	 *
+	 */
+	
 	class Cell {
 		public int line, col;
 
@@ -26,6 +48,15 @@ public class MazeBuilder {
 	private int heroX, heroY;
 
 	
+	/**
+	 * Maze Builder Constructor.
+	 * Initializes attributes and starts the building of the maze.
+	 * Only stops when there is a valid, playable maze
+	 * @param size
+	 * @param nDrakes
+	 * @param nSwords
+	 */
+	
 	public MazeBuilder(int size, int nDrakes, int nSwords) {
 		this.size = size;
 		this.nDrakes = nDrakes;
@@ -36,6 +67,10 @@ public class MazeBuilder {
 			buildMaze();
 		} while (!validMaze());
 	}
+	
+	/**
+	 * Initializes an array to be used to check the maze's validity through a Backtracking Algorithm
+	 */
 
 	public void initializeVisited2() {
 		// initialize visited
@@ -52,14 +87,27 @@ public class MazeBuilder {
 					heroX = i;
 					heroY = j;
 					break outerLoop;
-				}
-		
+				}	
 	}
 
+	/**
+	 * Checks the Maze's validity
+	 * @return True on a valid Maze, false otherwise
+	 * 
+	 */
+	
 	public boolean validMaze() {
 		initializeVisited2();
 		return findGoal(heroX, heroY);
 	}
+	
+	/**
+	 * Attempts to find a clean path between the Hero and a Sword
+	 * Recursive function: Calls itself many times due to the Backtracking algorithm implemented
+	 * @param x Line of the Sword
+	 * @param y Column of the Sword
+	 * @return True on finding a clear path, false other wise.
+	 */
 
 	public boolean findGoal(int x, int y) {
 		
@@ -100,6 +148,12 @@ public class MazeBuilder {
 
 	}
 
+	/**
+	 * Checks if the GuideCell used can move in the specified direction
+	 * @param dir Direction to move the GuideCell
+	 * @return True when the GuideCell can move, false otherwise
+	 */
+	
 	public boolean canMove(Direction dir) {
 		int nextLine = guideCellV.line, nextCol = guideCellV.col;
 
@@ -129,6 +183,12 @@ public class MazeBuilder {
 		return true;
 	}
 
+	/**
+	 * Attempts to move the GuideCell in a random direction
+	 * 
+	 * 
+	 */
+	
 	public void moveGuideCell() {
 		Random rand = new Random();
 		int direction = rand.nextInt(4);
@@ -183,6 +243,11 @@ public class MazeBuilder {
 
 	}
 
+	/**
+	 * Checks if the GuideCell has reached a Dead End
+	 * @return True if the GuideCell is at a Dead End, false otherwise
+	 */
+	
 	public boolean deadEnd() {
 
 		if (canMove(Direction.up) || canMove(Direction.down) || canMove(Direction.left) || canMove(Direction.right))
@@ -191,6 +256,10 @@ public class MazeBuilder {
 		return true;
 	}
 
+	/**
+	 * Implementation of the algorithm to generate a random maze
+	 */
+	
 	public void buildMaze() {
 		// Preparing
 

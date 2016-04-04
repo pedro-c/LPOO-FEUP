@@ -340,11 +340,11 @@ public class TestMazeWithRandomDragon {
 		boolean outcome1 = false, outcome2 = false;
 		while (! outcome1 || !outcome2) {
 			Game g = new Game(3, 1, 1, 1, m2);
-			g.Drakes.get(0).asleep=true;
+			g.Drakes.get(0).setAsleep(true);
 			g.moveDrake(g.Drakes.get(0));
-			if (g.Drakes.get(0).asleep==false)
+			if (g.Drakes.get(0).isAsleep()==false)
 				outcome1 = true;
-			else if(g.Drakes.get(0).asleep==true)
+			else if(g.Drakes.get(0).isAsleep()==true)
 				outcome2 = true;
 			else
 				fail("some error message");
@@ -356,10 +356,10 @@ public class TestMazeWithRandomDragon {
 		boolean outcome1 = false;
 		while (! outcome1) {
 			Game g = new Game(1, 1, 1, 1, m1);
-			g.Drakes.get(0).asleep=true;
+			g.Drakes.get(0).setAsleep(true);
 			g.updateMaze();
 			g.killDrake(3,3);
-			if (g.Drakes.get(0).dead==false)
+			if (g.Drakes.get(0).isDead()==false)
 				outcome1 = true;
 			else
 				fail("some error message");
