@@ -10,11 +10,11 @@ import java.util.*;
  */
 
 public class Game {
-	
+
 	public enum GameStatus {
 		HeroUnarmed, HeroArmed, HeroDied;
 	}
-	
+
 	public boolean gameLost = false;
 	public boolean gameWon = false;
 	private GameStatus status;
@@ -36,7 +36,7 @@ public class Game {
 	 * @param nSwords Number of Swords
 	 * @param maze The Maze itself
 	 */
-	
+
 	public Game(int mode, int nDrakes, int nExits, int nSwords, char[][] maze)
 	{
 		this.mode = mode;
@@ -89,7 +89,7 @@ public class Game {
 	/**
 	 * Puts the maze matrix into a string to be printed
 	 */
-	
+
 	@Override
 	public String toString()
 	{
@@ -108,7 +108,7 @@ public class Game {
 	 * 
 	 * @return A point containing the Hero's coordinates
 	 */
-	
+
 	public Point getHeroPosition()
 	{
 		Point p = new Point(hero.getLine(), hero.getCol());
@@ -130,7 +130,7 @@ public class Game {
 	 * @param col Column where the Drake is
 	 * @return Status of the drake (true for alive, false otherwise)
 	 */
-	
+
 	public boolean getDrakeStatus(int line, int col){
 
 		boolean ret = false;
@@ -147,7 +147,7 @@ public class Game {
 	 * @param col Column where the exit is
 	 * @return The status of the Exit (true for open, false otherwise)
 	 */
-	
+
 	public boolean checkExit(int line, int col) {
 		boolean ret = false;
 
@@ -165,7 +165,7 @@ public class Game {
 	 * @param line Line where the sword is
 	 * @param draw True if the sword is to be drawn on the map, false if it already held by the hero
 	 */
-	
+
 	public void updateSword(int col, int line, boolean draw) {
 		for (int i = 0; i < nSwords; i++) {
 			if (Swords.get(i).getCol() == col && Swords.get(i).getLine() == line) {
@@ -181,7 +181,7 @@ public class Game {
 	 * @param newCol Column where the Hero will be placed
 	 * @return Successfulness of the placement
 	 */
-	
+
 	public boolean moveHero(int newLine, int newCol)
 	{		
 		int curLine = hero.getLine(), curCol = hero.getCol();
@@ -218,17 +218,17 @@ public class Game {
 	 * Attempts to move the Hero in the upwards direction
 	 * @return Successfulness of the placement
 	 */
-	
+
 	public boolean moveHeroUp() {
 
 		return moveHero(hero.getLine() - 1, hero.getCol());
 	}
-	
+
 	/**
 	 * Attempts to move the Hero in the downwards direction
 	 * @return Successfulness of the placement
 	 */
-	
+
 	public boolean moveHeroDown() {
 
 		return moveHero(hero.getLine() + 1, hero.getCol());
@@ -238,7 +238,7 @@ public class Game {
 	 * Attempts to move the Hero in the leftwards direction
 	 * @return Successfulness of the placement
 	 */
-	
+
 	public boolean moveHeroRight() {
 
 		return moveHero(hero.getLine(), hero.getCol() + 1);
@@ -248,7 +248,7 @@ public class Game {
 	 * Attempts to move the Hero in the rightwards direction
 	 * @return Successfulness of the placement
 	 */
-	
+
 	public boolean moveHeroLeft() {
 
 		return moveHero(hero.getLine(), hero.getCol() - 1);
@@ -260,7 +260,7 @@ public class Game {
 	 * @param col Column where the Drake is
 	 * @return Index of the Drake in the Drakes ArrayList
 	 */
-	
+
 	public int getDrakePos(int line, int col)
 	{		
 		for(int i = 0; i < Drakes.size(); ++i)
@@ -268,13 +268,13 @@ public class Game {
 				return i;
 		return -1; //Not found
 	}
-	
+
 	/**
 	 * Attempts to kill the drake at the specified coordinates. Hero dies if it is not armed and the drake is awake.
 	 * @param line Line where the Drake is
 	 * @param col Column where the Drake is
 	 */
-	
+
 	public void killDrake(int line, int col) {
 
 		if(hero.getSymbol() != 'A' && Maze[line][col] == 'D')
@@ -288,10 +288,10 @@ public class Game {
 		{
 			return; //Does nothing
 		}
-		
+
 		Drakes.get(getDrakePos(line, col)).setDead(true);
 		Maze[line][col] = ' ';
-		
+
 
 		if(checksAllDrakes())//Checks if all drakes are dead
 			for (int i = 0; i < nExits; i++){
@@ -304,7 +304,7 @@ public class Game {
 	 * Returns an ArrayList of all Drakes' coordinates for testing purposes
 	 * @return ArrayList of coordinates
 	 */
-	
+
 	public ArrayList<Point> getDrakesPositions(){
 
 		ArrayList<Point> Positions = new ArrayList<Point>(nDrakes);
@@ -316,12 +316,12 @@ public class Game {
 
 		return Positions;
 	}
-	
+
 	/**
 	 * Checks if all Drakes are dead
 	 * @return True when all Drakes are dead, false otherwise
 	 */
-	
+
 	public boolean checksAllDrakes(){
 
 		for (int i = 0; i < nDrakes; i++) {
@@ -338,7 +338,7 @@ public class Game {
 	 * @param col Column where the is to be moved
 	 * @return True if the Drake can be moved, false otherwise
 	 */
-	
+
 	public boolean canMoveDrake(int line, int col)
 	{
 		if(Maze[line][col] == ' ' || Maze[line][col] == 'E')
@@ -354,17 +354,17 @@ public class Game {
 	 * When the Drake wakes up, it has a 50% chance to move before the turn ends.
 	 * @param d The Drake to be moved
 	 */
-	
+
 	public void moveDrake(Drake d)
 	{
 
 		if(mode == 1) //On Static Drake Mode, do nothing
 			return;
-		
+
 		//Used to check and update next position
 		int nextLine = d.getLine();
 		int nextCol = d.getCol();
-		
+
 		int maxRandInt = 0;
 		Random rand = new Random();
 
@@ -374,7 +374,7 @@ public class Game {
 		if(mode == 3) //On Moving/Sleeping Drake Mode, 50% chance to move and 25% chance to fall asleep. If asleep, 50% chance to awake up
 			maxRandInt = 4;
 
-		
+
 		if(d.isAsleep())
 		{
 			int awakesUp = rand.nextInt(2);
@@ -422,10 +422,10 @@ public class Game {
 					}
 				}
 				//Updates drake's coordinates
-				
+
 				d.setLine(nextLine);
 				d.setCol(nextCol);
-				
+
 			}
 		}
 		if(move == 3) //Sleeps 
@@ -438,13 +438,11 @@ public class Game {
 	 * Calls functions to move Hero and Drakes.
 	 * Handles the placement of the swords.
 	 */
-	
+
 	public void updateMaze() {
 
-
-		//checks for drakes adjacent to the hero
-
-		
+		// Puts Hero
+		Maze[hero.getLine()][hero.getCol()] = hero.getSymbol();
 
 		// Moves and puts Drakes
 		for (int i = 0; i < nDrakes; i++){
@@ -457,9 +455,10 @@ public class Game {
 					Maze[Drakes.get(i).getLine()][Drakes.get(i).getCol()] = 'D';
 				else
 					Maze[Drakes.get(i).getLine()][Drakes.get(i).getCol()] = 'd';
-				
+
 			}
 		}
+		//checks for drakes adjacent to the hero
 
 		if(Maze[hero.getLine()][hero.getCol()-1] == 'D' || Maze[hero.getLine()][hero.getCol()-1] == 'd') 
 			killDrake(hero.getLine(),hero.getCol() - 1);
@@ -469,7 +468,10 @@ public class Game {
 			killDrake(hero.getLine() - 1,hero.getCol());
 		else if(Maze[hero.getLine()+1][hero.getCol()] == 'D' || Maze[hero.getLine()+1][hero.getCol()] == 'd')
 			killDrake(hero.getLine() + 1,hero.getCol());
-		
+
+		if(gameLost == true)
+			return;
+
 		// Puts Swords
 		for (int i = 0; i < nSwords; i++) {
 			if (Maze[Swords.get(i).getLine()][Swords.get(i).getCol()] == 'D'){ //Checks if there is drake in the tile
@@ -479,15 +481,8 @@ public class Game {
 			else
 				if (Swords.get(i).isDraw())
 					Maze[Swords.get(i).getLine()][Swords.get(i).getCol()] = 'E';
-				else
-					Maze[Swords.get(i).getLine()][Swords.get(i).getCol()] = ' ';
 		}
 
-
-
-		// Puts Hero
-		Maze[hero.getLine()][hero.getCol()] = hero.getSymbol();
-		return;
 	}
 
 }
