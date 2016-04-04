@@ -12,13 +12,17 @@ import java.util.*;
  * We used an algorithm with is heavely influenced on an algorithm developed by Henrique Ferrolho.
  * @see <a href="http://difusal.blogspot.pt/2014/02/maze-generation-algorithm.html">Henrique Ferrolho's Algorithm</a>
  * 
- * @author Tiago & Pedro
  *
  *
  */
 
 
 public class MazeBuilder {
+
+	/**
+	 * Enum for all the possible directions the GuideCell can take;
+	 *
+	 */
 
 	public enum Direction {
 		right, left, up, down, NULL;
@@ -29,7 +33,7 @@ public class MazeBuilder {
 	 * @author Tiago & Pedro
 	 *
 	 */
-	
+
 	class Cell {
 		public int line, col;
 
@@ -39,24 +43,29 @@ public class MazeBuilder {
 		}
 	}
 
-	public int size, nDrakes, nSwords, visitedSize;
-	Cell guideCellV;
-	Stack<Cell> pathHistory;
-	boolean[][] visited;
-	boolean[][] visited2;
+	private int size, nDrakes, nSwords, visitedSize;
+	private Cell guideCellV;
+	private Stack<Cell> pathHistory;
+	private boolean[][] visited;
+	private boolean[][] visited2;
+
+	/**
+	 * The maze to be constructed is stored here.
+	 */
+
 	public char[][] maze;
 	private int heroX, heroY;
 
-	
+
 	/**
 	 * Maze Builder Constructor.
 	 * Initializes attributes and starts the building of the maze.
 	 * Only stops when there is a valid, playable maze
-	 * @param size
-	 * @param nDrakes
-	 * @param nSwords
+	 * @param size Size of the Maze to be built
+	 * @param nDrakes Number of Drakes in the Maze
+	 * @param nSwords Number of Swords in the Maze
 	 */
-	
+
 	public MazeBuilder(int size, int nDrakes, int nSwords) {
 		this.size = size;
 		this.nDrakes = nDrakes;
@@ -67,7 +76,7 @@ public class MazeBuilder {
 			buildMaze();
 		} while (!validMaze());
 	}
-	
+
 	/**
 	 * Initializes an array to be used to check the maze's validity through a Backtracking Algorithm
 	 */
@@ -75,7 +84,7 @@ public class MazeBuilder {
 	public void initializeVisited2() {
 		// initialize visited
 		visited2 = new boolean[size][size];
-		
+
 		for (int i = 0; i < size; i++)
 			for (int a = 0; a < size; a++)
 				visited2[i][a] = false;
@@ -95,12 +104,12 @@ public class MazeBuilder {
 	 * @return True on a valid Maze, false otherwise
 	 * 
 	 */
-	
+
 	public boolean validMaze() {
 		initializeVisited2();
 		return findGoal(heroX, heroY);
 	}
-	
+
 	/**
 	 * Attempts to find a clean path between the Hero and a Sword
 	 * Recursive function: Calls itself many times due to the Backtracking algorithm implemented
@@ -110,9 +119,9 @@ public class MazeBuilder {
 	 */
 
 	public boolean findGoal(int x, int y) {
-		
+
 		visited2[x][y] = true; 
-		
+
 		if (maze[x][y] == 'E')
 			return true;
 
@@ -153,7 +162,7 @@ public class MazeBuilder {
 	 * @param dir Direction to move the GuideCell
 	 * @return True when the GuideCell can move, false otherwise
 	 */
-	
+
 	public boolean canMove(Direction dir) {
 		int nextLine = guideCellV.line, nextCol = guideCellV.col;
 
@@ -188,7 +197,7 @@ public class MazeBuilder {
 	 * 
 	 * 
 	 */
-	
+
 	public void moveGuideCell() {
 		Random rand = new Random();
 		int direction = rand.nextInt(4);
@@ -247,7 +256,7 @@ public class MazeBuilder {
 	 * Checks if the GuideCell has reached a Dead End
 	 * @return True if the GuideCell is at a Dead End, false otherwise
 	 */
-	
+
 	public boolean deadEnd() {
 
 		if (canMove(Direction.up) || canMove(Direction.down) || canMove(Direction.left) || canMove(Direction.right))
@@ -259,7 +268,7 @@ public class MazeBuilder {
 	/**
 	 * Implementation of the algorithm to generate a random maze
 	 */
-	
+
 	public void buildMaze() {
 		// Preparing
 
@@ -358,7 +367,7 @@ public class MazeBuilder {
 
 				if (maze[lineD][colD] == ' ')
 					if (maze[lineD - 1][colD] != 'H' && maze[lineD + 1][colD] != 'H' && maze[lineD][colD - 1] != 'H'
-							&& maze[lineD][colD + 1] != 'H') {
+					&& maze[lineD][colD + 1] != 'H') {
 						maze[lineD][colD] = 'D';
 						placed = true;
 					}

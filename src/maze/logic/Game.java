@@ -5,46 +5,118 @@ import java.util.*;
 /**
  * Game class.
  * Controls all the logic components of the game.
- * @author Tiago & Pedro
+ * The game functions as follows:
+ * There is a hero and there are drakes, swords and exits in a maze.
+ * The player controls the movement of the hero through the "w", "a", "s", "d" keys or through the arrow keys.
+ * The game is lost if:
+ * 	1. The hero ends his turn next to a drake.
+ * 	2. The hero ends his turn in a fire.
+ * The hero can arm himself by picking up a sword.
+ * Once armed, the hero will kill any adjacent drake.
+ * Once all drakes are dead, the exits are opened and the hero is free to go.
  *
  */
 
 public class Game {
 
+	/**
+	 * GameStatus Enum to store all possible game statuses.
+	 *
+	 */
+	
 	public enum GameStatus {
 		HeroUnarmed, HeroArmed, HeroDied;
 	}
 
+	/**
+	 * Tracks if the game is lost or not
+	 */
+	
 	public boolean gameLost = false;
+	
+	/**
+	 * Tracs if the game is won or not
+	 */
 	public boolean gameWon = false;
-	private GameStatus status;
-	private int mode;
-	private int fireTimer = 0;
+	
+	/**
+	 * Tracks the game status, i.e. the condition of the Hero
+	 */
+	
+	public GameStatus status;
+	
+	/**
+	 * Stores game mode.
+	 * 1 means Static Drake
+	 * 2 means Moving Drake
+	 * 3 means Moving and Sleeping Drake
+	 */
+	
+	public int mode;
+	
+	/**
+	 * Number of drakes in the maze
+	 */
+	
 	public int nDrakes = 0;
+	
+	/**
+	 * Number of swords in the maze
+	 */
+	
 	public int nSwords = 0;
+	
+	/**
+	 * Number of exits in the maze
+	 */
+	
 	public int nExits = 0;
+	
+	/**
+	 * Char matrix to store the maze. Each object is stored as a differente char
+	 */
+	
 	public char[][] Maze;
+	
+	/**
+	 * The Hero in the maze
+	 */
+	
 	Hero hero = new Hero();
+	
+	/**
+	 * ArrayList to store all drakes in the maze
+	 */
+	
 	public ArrayList<Drake> Drakes = new ArrayList<Drake>(nDrakes);
+	
+	/**
+	 * ArrayList to store all swords in the maze
+	 */
+	
 	public ArrayList<Sword> Swords = new ArrayList<Sword>(nSwords);
+	
+	/**
+	 * ArrayList to store all exits in the maze
+	 */
+	
 	public ArrayList<Exit> Exits = new ArrayList<Exit>(nExits);
+	
+	/**
+	 * ArrayList to store all fires in the maze
+	 */
+	
 	public ArrayList<Fire> Fires = new ArrayList<Fire>();
 
 	/**
 	 * Game Constructor.
 	 * @param mode Game Mode
-	 * @param nDrakes Number of Drakes
-	 * @param nExits Number of Exits
-	 * @param nSwords Number of Swords
 	 * @param maze The Maze itself
 	 */
 
 	public Game(int mode, char[][] maze)
 	{
 		this.mode = mode;
-		this.nDrakes = nDrakes;
-		this.nExits = nExits;
-		this.nSwords = nSwords;
 		status = GameStatus.HeroUnarmed;
 
 		Maze = maze;		
@@ -275,7 +347,6 @@ public class Game {
 	 */
 
 
-
 	public void killDrake(int line, int col) {
 
 		if(hero.getSymbol() != 'A' && Maze[line][col] == 'D')
@@ -348,14 +419,11 @@ public class Game {
 	}
 
 	/**
-	 * Attempts to move the Drake based on the game mode and on probabilities:
-	 * On "Static Mode", the Drake will not move. On other modes, the Drake will have a 50% likelihood of moving.
-	 * On "Moving and Sleeping Dragon", the Drake will also have a 25% chance to fall asleep.
-	 * While sleeping, the Drake has 50% chance to wake up.
-	 * When the Drake wakes up, it has a 50% chance to move before the turn ends.
-	 * @param d The Drake to be moved
+	 * Creates a column of fire in the upwards direction of the drake
+	 * @param line Line where the fire begins
+	 * @param col Column where the fire begins
 	 */
-
+	
 	public void createFireUp(int line, int col)
 	{
 		int nextLine = line - 1, nextCol = col;
@@ -365,6 +433,13 @@ public class Game {
 			nextLine--;
 		}	
 	}
+	
+	/**
+	 * Creates a column of fire in the downwards direction of the drake
+	 * @param line Line where the fire begins
+	 * @param col Column where the fire begins
+	 */
+	
 	public void createFireDown(int line, int col)
 	{
 		int nextLine = line + 1, nextCol = col;
@@ -374,6 +449,13 @@ public class Game {
 			nextLine++;
 		}	
 	}
+	
+	/**
+	 * Creates a line of fire in the leftwards direction of the drake
+	 * @param line Line where the fire begins
+	 * @param col Column where the fire begins
+	 */
+	
 	public void createFireLeft(int line, int col)
 	{
 		int nextLine = line , nextCol = col - 1;
@@ -383,6 +465,13 @@ public class Game {
 			nextCol--;
 		}	
 	}
+	
+	/**
+	 * Creates a line of fire in the rightwards direction of the drake
+	 * @param line Line where the fire begins
+	 * @param col Column where the fire begins
+	 */
+	
 	public void createFireRight(int line, int col)
 	{
 		int nextLine = line, nextCol = col + 1;
@@ -393,6 +482,13 @@ public class Game {
 		}	
 	}
 
+	/**
+	 * Checks if the Drake's Fire Ability Cooldown is over. 
+	 * If so, creates fire in a straight line in one of the directions.
+	 * Drake can fire directly into a wall, thus not creating any flames on the Maze.
+	 * @param d Drake to be checked
+	 */
+	
 	public void spitFire(Drake d)
 	{
 		Random rand = new Random();
@@ -418,6 +514,15 @@ public class Game {
 		}
 		d.advanceFireCounter();
 	}
+	
+	/**
+	 * Attempts to move the Drake based on the game mode and on probabilities:
+	 * On "Static Mode", the Drake will not move. On other modes, the Drake will have a 50% likelihood of moving.
+	 * On "Moving and Sleeping Dragon", the Drake will also have a 25% chance to fall asleep.
+	 * While sleeping, the Drake has 50% chance to wake up.
+	 * When the Drake wakes up, it has a 50% chance to move before the turn ends.
+	 * @param d The Drake to be moved
+	 */
 
 	public void moveDrake(Drake d)
 	{
@@ -500,7 +605,11 @@ public class Game {
 	/**
 	 * Updates the Maze.
 	 * Calls functions to move Hero and Drakes.
-	 * Handles the placement of the swords.
+	 * Handles the placement of the swords and fires.
+	 * If the Hero ends his turn on a flame, the game is lost.
+	 * If the Hero is unarmed and ends his turn next to a Drake, the game is lost.
+	 * If the Hero is armed and ends his turn next to a Drake, he kills it.
+	 * When all Drakes are dead, the exits open
 	 */
 
 	public void updateMaze() {

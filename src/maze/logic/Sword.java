@@ -1,13 +1,13 @@
 package maze.logic;
 
+/**
+ * Sword class to be used in the Maze
+ *
+ */
+
 public class Sword {
 	
-	/**
-	 * Sword class to be used in the Maze
-	 * @author Tiago & Pedro
-	 *
-	 */
-	
+
 	private int line, col;
 	private boolean draw;
 

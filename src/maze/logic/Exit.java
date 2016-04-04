@@ -2,7 +2,6 @@ package maze.logic;
 
 /**
  * Exit class to be used in the Maze
- * @author Tiago & Pedro
  *
  */
 

@@ -2,7 +2,6 @@ package maze.logic;
 
 /**
  * Hero class to be used in the Maze
- * @author Tiago & Pedro
  *
  */
 
@@ -80,7 +79,7 @@ public class Hero {
 	
 	/**
 	 * Sets Hero's symbol to specified value
-	 * @param col Hero's new symbol
+	 * @param symbol Hero's new symbol
 	 */
 	
 	public void setSymbol(char symbol) {

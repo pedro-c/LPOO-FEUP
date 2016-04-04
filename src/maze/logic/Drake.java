@@ -4,7 +4,6 @@ import java.util.Random;
 
 /**
  * Drake class to be used in the Maze
- * @author Tiago & Pedro
  *
  */
 
@@ -67,13 +66,17 @@ public class Drake {
 	}
 
 	/**
-	 * Sets Drake's line to specified value
-	 * @param line Drake's new line
+	 * 
+	 * @return Number of turns until Fire Spitting ability
 	 */
 	
 	public int getFireCounter(){
 		return fireCounter;
 	}
+	
+	/**
+	 * Reduces de cooldown of the Fire Spitting ability by 1. Once it goes behind 0, resets it to max
+	 */
 	
 	public void advanceFireCounter(){
 
@@ -81,6 +84,11 @@ public class Drake {
 		if(fireCounter == - 1)
 			fireCounter = 9;
 	}
+	
+	/**
+	 * Sets Drake's line to specified value
+	 * @param line Drake's new line
+	 */
 	
 	public void setLine(int line) {
 		this.line = line;
